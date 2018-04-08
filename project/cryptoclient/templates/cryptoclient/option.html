@@ -1,0 +1,20 @@
+{% extends "cryptoclient/_base.html" %}
+
+{% block title %}
+	<p>Options</p>
+{% endblock title %}
+
+{% block header %}
+	
+	
+{% endblock header %}
+	
+{% block main %}
+	<h1>A-Trade</h1>
+	<a href="{% url 'cryptoclient:wallet-list' %}"><h1>Wallet</h1></a>
+	<a href="{% url 'cryptoclient:buy-sell' %}"><h1>Buy/Sell</h1></a>
+	<a href="{% url 'cryptoclient:options-list' %}"><h1>Swap Cryptos</h1></a>
+	<a href="{% url 'cryptoclient:profile' %}"><h1>Profile</h1></a>
+
+
+{% endblock main %}

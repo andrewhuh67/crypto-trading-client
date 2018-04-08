@@ -1,0 +1,39 @@
+{% extends "cryptoclient/_base.html" %}
+
+{% block title %}
+	<p>Profile</p>
+{% endblock title %}
+
+{% block header %}
+	
+	
+{% endblock header %}
+	
+{% block main %}
+	<h1>Profile</h1>
+	<h1>Total Account Value</h1>
+	
+	<h2>{{account_value}}</h2>
+
+	<h3>Litecoin Transactions</h3>
+	{% for transaction in litecoin_transactions %}
+		<h3></h3>
+		<h2>Transaction amount:</h2>
+		<li>{{transaction.amount}}</li>
+		{% if transaction.to %}
+			<h2>To address:</h2>
+			<li>{{transaction.to.address}}</li>
+			<h2>Currency</h2>
+			<li>{{transaction.to.currency}}</li>
+		{% endif %}
+		{% if transaction.buy %}
+			<h2>Amount:</h2>
+			<li>{{transaction.native_amount.amount}}</li>
+			<h2>Currency</h2>
+			<li>{{transaction.native_amount.currency}}</li>
+		{% endif %}
+		<h2>Transaction Description</h2>
+		<li>{{transaction.details.title}}</li>
+	{% endfor %}
+
+{% endblock main %}

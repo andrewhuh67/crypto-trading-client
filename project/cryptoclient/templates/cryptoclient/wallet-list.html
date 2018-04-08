@@ -1,0 +1,37 @@
+{% extends "cryptoclient/_base.html" %}
+
+{% block title %}
+	<p>List Wallets</p>
+{% endblock title %}
+
+{% block header %}
+	
+	
+{% endblock header %}
+	
+{% block main %}
+	<h3><a href="{% url 'cryptoclient:wallet-create' %}">Create Wallet</a></h3>
+	<h3><a href="{% url 'cryptoclient:send-money' %}">Send Money</a></h3>
+	<h3>CURRENT WALLETS</h3>
+	<div class="container">
+		<ul>
+			<ol>
+				{% for wallet in wallets %}
+				
+					<li>NAME:{{wallet.name}}</li>
+					<li>AMOUNT:{{wallet.balance.amount}}</li>
+					<li>ASSET:{{wallet.balance.currency}}</li>
+					<li>USD:{{wallet.native_balance.amount}}</li>
+
+					<li>YOU NEED TO COPY THE ADDRESS</li>
+					<li>ADDRESS:{{wallet.id}}</li>
+				
+				{% endfor %}
+			</ol>
+		</ul>
+	</div>
+
+	
+
+
+{% endblock main %}
