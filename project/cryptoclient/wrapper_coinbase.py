@@ -1,17 +1,16 @@
 from coinbase.wallet.client import Client
-from cryptoclient.credentials import Credentials
+from cryptoclient.credentials import CredentialsCB
 
-credentials = Credentials()
+credentials = CredentialsCB()
 
 API_KEY = credentials.api_key()
 # both these need to be in a seperate file later. before you push to github.
 API_SECRET = credentials.api_secret()
 
 
+
 class Wallet():
 	
-	def request_header(self):
-		pass
 	def authenticate(self):
 		client = Client(
 		    API_KEY,
@@ -84,6 +83,17 @@ class Wallet():
 		primary_account = self.get_primary_account()
 		primary_account.send_money(to=address.address, amount=amount, currency=currency, description=description)
 
+
+	def sell_coin(self, amount, currency):
+		pass
+
+	def buy_coin(self, amount, currency):
+		pass
+
+	def get_orders(self):
+		auth = self.authenticate()
+		orders = auth.get_orders()
+		return orders
 
 
 

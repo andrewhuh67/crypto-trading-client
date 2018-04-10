@@ -10,7 +10,24 @@
 {% endblock header %}
 	
 {% block main %}
-	YES
+	<h1>Buy/Sell</h1>
+
+	<ol>
+		{% for account in accounts %}
+			
+			<li>Available: {{account.available}}</li>
+			<li>Hold: {{account.hold}}</li>
+			<li>Currency:{{account.currency}}</li>
+
+		{% endfor %}
+
+	</ol>
+
+	<form action="{% url 'cryptoclient:buy-sell' %}" method="POST">
+	    {% csrf_token %}
+	    {{ form }}
+	    <input type="submit" value="Submit" />
+	</form>
 
 
 {% endblock main %}
