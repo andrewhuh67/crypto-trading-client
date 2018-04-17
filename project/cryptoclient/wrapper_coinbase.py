@@ -25,7 +25,7 @@ class Wallet():
 		auth = self.authenticate()
 
 		accounts = auth.get_accounts()
-		print(accounts.data, "account data line 33")
+		# print(accounts.data, "account data line 33")
 		return accounts
 
 	def create_wallet(self, name):
@@ -50,8 +50,9 @@ class Wallet():
 	def get_accounts(self):
 		auth = self.authenticate()
 		accounts = auth.get_accounts()
-		print(accounts)
+		
 		return accounts
+
 	def get_primary_transactions(self):
 		auth = self.authenticate()
 		primary_account = auth.get_primary_account()
@@ -84,16 +85,60 @@ class Wallet():
 		primary_account.send_money(to=address.address, amount=amount, currency=currency, description=description)
 
 
-	def sell_coin(self, amount, currency):
-		pass
+	# def sell_coin(self, amount, currency):
+	# 	pass
 
-	def buy_coin(self, amount, currency):
-		pass
+	# def buy_coin(self, amount, currency):
+	# 	pass
 
 	def get_orders(self):
 		auth = self.authenticate()
 		orders = auth.get_orders()
 		return orders
+
+	def get_addresses(self):
+		auth = self.authenticate()
+		accounts = self.get_accounts()
+		# print(accounts['data'], "get_addresses")
+		accounts_data = accounts['data']
+		account_ids = []
+		account_currencies = []
+		for accounts in accounts_data:
+			# print(accounts['currency'])
+			account_currencies.append(accounts['currency'])
+			account_ids.append(accounts['id'])
+
+		accounts = zip(account_ids, account_currencies)
+
+		# print(accounts)
+
+		addresses = []
+		for key, value in accounts:
+			print(key)
+			address = auth.get_addresses(key)
+			if address['data'] == None:
+				
+				
+			print(address)
+			addresses.append(address)
+
+		print(addresses)
+
+	def create_addresses(self):
+
+
+			
+
+
+
+
+
+
+
+
+
+
+
 
 
 

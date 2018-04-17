@@ -14,7 +14,7 @@ class MoneyTransfer(forms.Form):
 	currency = forms.CharField(max_length=40)
 	description = forms.CharField(max_length=30)
 
-class PurchaseOrderForm(forms.Form):
+class LimitOrderForm(forms.Form):
 	
 	
 
@@ -29,3 +29,36 @@ class PurchaseOrderForm(forms.Form):
 	crypto_pair = forms.CharField(max_length=40)
 	price = forms.FloatField()
 	amount = forms.FloatField()
+	
+	
+
+class MarketOrderForm(forms.Form):
+
+	order_type = forms.ChoiceField(choices=ORDER_CHOICES,
+								label="",
+                                initial='',
+                                widget=forms.Select(),
+                                required=True
+                                )
+	order_side = forms.ChoiceField(choices=SIDE_CHOICES, required=True)
+	crypto_pair = forms.CharField(max_length=40)
+	
+	amount = forms.FloatField()
+
+class CryptoToCryptoForm(forms.Form):
+	
+	price = forms.CharField(max_length=30)
+	order_type = forms.ChoiceField(choices=SIDE_CHOICES,
+								label="",
+                                initial='',
+                                widget=forms.Select(),
+                                required=True
+                                )
+	price_type = forms.CharField(max_length=30)
+	order_quantity = forms.FloatField()
+	pair = forms.CharField(max_length=30)
+								
+
+
+
+

@@ -1,0 +1,40 @@
+{% extends "cryptoclient/_base.html" %}
+
+{% block title %}
+	<p>SWAP-CRYPTO</p>
+{% endblock title %}
+
+{% block header %}
+	
+	
+{% endblock header %}
+	
+{% block main %}
+	<h1>Coinigy Account List</h1>
+	
+	<h1>{{auth.auth_nickname}}</h1>
+	<h1>{{auth.exch_name}}</h1>
+
+	{% for balance in balances %}
+		<h3>CryptoCurrency Symbol</h3>
+		<li>{{balance.balance_curr_code}}</li>
+		<h3>Balance Available</h3>
+		<li>{{balance.balance_amount_avail}}</li>
+		<h3>Value in Bitcoin</h3>
+		<li>{{balance.btc_balance}}</li>
+		<h3>Total Balance</h3>
+		<li>{{balance.balance_amount_total}}</li>
+	{% endfor %}
+
+	<form action="{% url 'cryptoclient:swap-crypto' %}" method="POST">
+	    {% csrf_token %}
+	    {{ form }}
+	    <input type="submit" value="Submit" />
+	</form>
+	
+	
+
+	
+
+
+{% endblock main %}

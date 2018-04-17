@@ -21,6 +21,22 @@
 
 		{% endfor %}
 
+		{% for crypto_pair in crypto_pairs %}
+			<li>{{crypto_pair.id}}</li>
+			
+			
+		{% endfor %}
+
+		{% for open_order in open_orders %}
+			<li>{{open_order.side}}</li>
+			<li>{{open_order.type}}</li>
+			<li>{{open_order.created_at}}</li>
+			<li>{{open_order.price}}</li>
+			<li>{{open_order.size}}</li>
+			
+			
+		{% endfor %}
+
 	</ol>
 
 	<form action="{% url 'cryptoclient:buy-sell' %}" method="POST">

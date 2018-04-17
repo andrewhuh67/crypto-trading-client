@@ -11,7 +11,8 @@ urlpatterns = [
     url(r'^crypto/wallet/create/$', views.WalletCreateView.as_view(), name="wallet-create"),
     url(r'^crypto/wallet/send-money/$', views.WalletSendMoneyView.as_view(), name="send-money"),
     url(r'^crypto/buy-sell/$', views.BuySellView.as_view(), name="buy-sell"),
-    url(r'^crypto/profile/$', views.ProfileView.as_view(), name="profile")
+    url(r'^crypto/profile/$', views.ProfileView.as_view(), name="profile"),
+    url(r'^crypto/swap-crypto/$', views.SwapCryptoView.as_view(), name="swap-crypto"),
 
 ]
 

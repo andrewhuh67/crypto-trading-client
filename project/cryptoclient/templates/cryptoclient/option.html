@@ -13,8 +13,22 @@
 	<h1>A-Trade</h1>
 	<a href="{% url 'cryptoclient:wallet-list' %}"><h1>Wallet</h1></a>
 	<a href="{% url 'cryptoclient:buy-sell' %}"><h1>Buy/Sell</h1></a>
-	<a href="{% url 'cryptoclient:options-list' %}"><h1>Swap Cryptos</h1></a>
+	<a href="{% url 'cryptoclient:swap-crypto' %}"><h1>Swap Cryptos</h1></a>
 	<a href="{% url 'cryptoclient:profile' %}"><h1>Profile</h1></a>
+
+
+	<h1>MARKET DATA</h1>
+
+	<h1>Bitcoin Price</h1>
+	<h2>{{bitcoin_data.price}}</h2>
+	<h1>Bitcoin Volume</h1>
+	<h2>{{bitcoin_data.volume}}</h2>
+	<h1>Ethereum Price</h1>
+	<h2>{{ethereum_data.price}}</h2>
+	<h1>Ethereum Volume</h1>
+	<h2>{{ethereum_data.volume}}</h2>
+	
+	
 
 
 {% endblock main %}
