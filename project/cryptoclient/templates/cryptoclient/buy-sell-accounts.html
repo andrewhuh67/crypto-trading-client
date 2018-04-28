@@ -1,7 +1,7 @@
 {% extends "cryptoclient/_base.html" %}
 
 {% block title %}
-	<p>Buy/Sell</p>
+	<p>Buy/Sell Orders</p>
 {% endblock title %}
 
 {% block header %}
@@ -10,14 +10,11 @@
 {% endblock header %}
 	
 {% block main %}
-	<h1>Buy/Sell</h1>
+	<h1>Buy/Sell Accounts</h1>
 
 	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
-	<h3><a href="{% url 'cryptoclient:buy-sell-order' %}">Orders</a></h3>
-	<h3><a href="{% url 'cryptoclient:buy-sell-accounts' %}">Accounts</a></h3>
+	<h3><a href="{% url 'cryptoclient:buy-sell' %}">Buy/Sell</a></h3>
 
-
-	<ol>
 		{% for account in accounts %}
 			
 			<li>Available: {{account.available}}</li>
@@ -26,13 +23,7 @@
 
 		{% endfor %}
 
-	</ol>
-
-	<form action="{% url 'cryptoclient:buy-sell' %}" method="POST">
-	    {% csrf_token %}
-	    {{ form }}
-	    <input type="submit" value="Submit" />
-	</form>
-
+		
+	
 
 {% endblock main %}

@@ -11,10 +11,13 @@
 	
 {% block main %}
 	<h1>Profile</h1>
+	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
 	<h1>Total Account Value</h1>
 	
 	<h2>{{account_value}}</h2>
 
+	
+	<h2>GDAX Transactions</h2>
 	<h3>Litecoin Transactions</h3>
 	{% for transaction in litecoin_transactions %}
 		<h3></h3>

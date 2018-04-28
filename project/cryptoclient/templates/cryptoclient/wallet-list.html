@@ -10,24 +10,26 @@
 {% endblock header %}
 	
 {% block main %}
-	<h3><a href="{% url 'cryptoclient:wallet-create' %}">Create Wallet</a></h3>
-	<!-- <h3><a href="{% url 'cryptoclient:send-money' %}">Send Money</a></h3> -->
+	<!-- <h3><a href="{% url 'cryptoclient:wallet-create' %}">Create Wallet</a></h3> -->
+	<h3><a href="{% url 'cryptoclient:wallet-address' %}">Wallet Addresses</a></h3>
+	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
+	<h3><a href="{% url 'cryptoclient:coinbase-gdax-transfer' %}">Coinbase-GDAX Transfer</a></h3>
 	<h3>CURRENT WALLETS</h3>
 	<div class="container">
 		<ul>
-			<ol>
+			
 				{% for wallet in wallets %}
-				
-					<li>NAME:{{wallet.name}}</li>
-					<li>AMOUNT:{{wallet.balance.amount}}</li>
-					<li>ASSET:{{wallet.balance.currency}}</li>
-					<li>USD:{{wallet.native_balance.amount}}</li>
+					<ul>
+						<h3>{{wallet.name}}</h3>
+						
+						<li>AMOUNT:{{wallet.balance.amount}}</li>
+						<li>ASSET:{{wallet.balance.currency}}</li>
+						<li>USD:{{wallet.native_balance.amount}}</li>
 
-					<li>YOU NEED TO COPY THE ADDRESS</li>
-					<li>ADDRESS:{{wallet.id}}</li>
-				
+					
+					</ul>
 				{% endfor %}
-			</ol>
+			
 		</ul>
 	</div>
 

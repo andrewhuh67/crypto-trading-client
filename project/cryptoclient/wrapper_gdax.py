@@ -101,7 +101,7 @@ class GDAXApi():
 
 		print(order_side, price, product_id, size, order_type)
 		print('CREATE LIMITORDER')
-		print(type(order_side), type(price), type(product_id), type(size), type(order_type))
+		print(type(order_side), type(price), type(product_id), type(size), type(order_type), "type")
 		
 		r = requests.post(api_url + 'orders', json=order, auth=auth)
 
@@ -142,7 +142,33 @@ class GDAXApi():
 		# print(bitcoin_data.json(), ethereum_data.json(), "1")
 		return bitcoin_data.json(), ethereum_data.json()
 
-	def 
+	# def transfer_coinbase_gdax(self, amount, currency, coinbase_account_id):
+
+	# 	auth = self.auth()
+
+	def withdraw_to_coinbase(self, amount, currency, coinbase_account_id):
+		auth = self.auth()
+
+		r = requests.post(api_url + 'withdrawals/coinbase-account', auth=auth)
+
+		response = r.json()
+
+		return response
+
+	def deposit_to_gdax(self, amount, currency, coinbase_account_id):
+
+		auth = self.auth()
+
+		r = requests.post(api_url + 'deposits/coinbase-account', auth=auth)
+
+		response = r.json()
+
+		return response
+
+
+
+
+
 
 
 

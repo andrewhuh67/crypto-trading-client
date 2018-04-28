@@ -26,7 +26,12 @@ class LimitOrderForm(forms.Form):
                                 )
 
 	order_side = forms.ChoiceField(choices=SIDE_CHOICES, required=True)
-	crypto_pair = forms.CharField(max_length=40)
+	crypto_pair = forms.ChoiceField(choices=CRYPTO_FIAT_CHOICES,
+								label="",
+                                initial='',
+                                widget=forms.Select(),
+                                required=True
+                                )
 	price = forms.FloatField()
 	amount = forms.FloatField()
 	
@@ -57,6 +62,34 @@ class CryptoToCryptoForm(forms.Form):
 	price_type = forms.CharField(max_length=30)
 	order_quantity = forms.FloatField()
 	pair = forms.CharField(max_length=30)
+
+class WalletSendMoneyForm(forms.Form):
+
+	to_address = forms.CharField(max_length=30)
+	amount = forms.FloatField()
+	currency = forms.ChoiceField(choices=CRYPTO_CHOICE,
+								label="",
+                                initial='',
+                                widget=forms.Select(),
+                                required=True
+                                )
+
+class BetweenGDAXAndCBForm(forms.Form):
+
+	amount = forms.FloatField()
+	currency = forms.ChoiceField(choices=CRYPTO_CHOICE,
+								label="",
+                                initial='',
+                                widget=forms.Select(),
+                                required=True
+                                )
+
+	transaction = forms.ChoiceField(choices=WITHDRAW_DEPOSIT,
+								label="",
+                                initial='',
+                                widget=forms.Select(),
+                                required=True
+                                )
 								
 
 

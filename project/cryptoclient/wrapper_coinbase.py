@@ -13,8 +13,8 @@ class Wallet():
 	
 	def authenticate(self):
 		client = Client(
-		    API_KEY,
-		    API_SECRET)
+			API_KEY,
+			API_SECRET)
 		if client:
 			print(client, "client wrapper")
 			return client
@@ -98,33 +98,89 @@ class Wallet():
 
 	def get_addresses(self):
 		auth = self.authenticate()
-		accounts = self.get_accounts()
-		# print(accounts['data'], "get_addresses")
-		accounts_data = accounts['data']
-		account_ids = []
-		account_currencies = []
-		for accounts in accounts_data:
-			# print(accounts['currency'])
-			account_currencies.append(accounts['currency'])
-			account_ids.append(accounts['id'])
+		accounts = auth.get_accounts()
+		
+		accounts = accounts['data']
+		
+		account_ids = {}
+		for account in accounts:
+			# print(account)
+			acc = account['currency']
+			# print(str(acc), "acc")
 
-		accounts = zip(account_ids, account_currencies)
+			account_ids[str(account['currency'])] = account['id']
 
-		# print(accounts)
-
-		addresses = []
-		for key, value in accounts:
+		# print(account_ids, "account_ids")
+		address_list = []
+		for key in account_ids:
 			print(key)
-			address = auth.get_addresses(key)
-			if address['data'] == None:
-				
-				
-			print(address)
-			addresses.append(address)
+			if key == 'USD':
+				continue
+			# print(account_ids[key], "item")
 
-		print(addresses)
+			single_account_id = account_ids[key]
+			address = auth.get_addresses(single_account_id)
+			
 
-	def create_addresses(self):
+			address = address['data'][0]
+			# print(address, "address")
+			address_list.append(address)
+		print(address_list)
+		return address_list
+
+		# print(accounts['data'], "get_addresses")
+		# accounts_data = accounts['data']
+		# account_ids = []
+		# account_currencies = []
+		# for accounts in accounts_data:
+		# 	# print(accounts['currency'])
+		# 	account_currencies.append(accounts['currency'])
+		# 	account_ids.append(accounts['id'])
+
+		# accounts = zip(account_ids, account_currencies)
+
+		# # print(accounts,'acc')
+
+		# addresses = []
+		# for key, value in accounts:
+		# 	print(key, value)
+		# 	address = auth.get_addresses(key)
+		# 	# print(address,'addresssss')
+
+		# 	empty_list = address['data']
+		# 	# print(empty_list, "empty_list")
+		# 	# print(empty_list, "eem")
+
+		# 	if empty_list == [] and key != 'USD':
+		# 		# print(address['data'], "data")
+		# 		new_address = self.create_addresses(key)
+		# 		empty_list.append(new_address)
+
+
+		# 	print(address, "address")
+		# 	addresses.append(address)
+		# 	print(empty_list, "empty_list")
+
+		# return addresses
+
+	def create_addresses(self, account_id):
+		auth = self.authenticate()
+		address = auth.create_address(account_id)
+		# print(address, "create-address")
+		return address
+
+	def delete_addresses(self,account_id):
+		pass
+
+	def send_money_coinbase_exchange(self, account_id, address, amount, currency):
+		auth = self.authenticate()
+
+		transaction = auth.send_money(account_id, address, amount, currency)
+
+		return transaction
+
+
+
 
 
 			

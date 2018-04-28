@@ -1,0 +1,38 @@
+{% extends "cryptoclient/_base.html" %}
+
+{% block title %}
+	<p>List Wallet Addresses</p>
+{% endblock title %}
+
+{% block header %}
+	
+	
+{% endblock header %}
+	
+{% block main %}
+	<!-- <h3><a href="{% url 'cryptoclient:wallet-create' %}">Create Wallet</a></h3> -->
+	<h3><a href="{% url 'cryptoclient:send-money' %}">Send Money</a></h3>
+	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
+
+	<h2>Coinbase Wallets</h2>
+	<h3>Wallet Address</h3>
+	<div class="container">
+		
+		<ul>
+			{% for wallet in addresses %}
+				<ul>
+					<h2>{{wallet.network}}</h2>
+					
+
+					<h3>YOU NEED TO COPY THE ADDRESS</h3>
+					<li>ADDRESS: {{wallet.address}}</li>
+				</ul>
+			{% endfor %}
+		</ul>
+		
+	</div>
+
+	
+
+
+{% endblock main %}
