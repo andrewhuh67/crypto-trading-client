@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.views.generic import View
 from cryptoclient.wrapper_coinbase import Wallet
 from cryptoclient.wrapper_gdax import GDAXApi
-from cryptoclient.wrapper_shapeshift import CoinigyAPI
+from cryptoclient.wrapper_coinigy import CoinigyAPI
 
 from cryptoclient.form import WalletCreationForm, LimitOrderForm, CryptoToCryptoForm, WalletSendMoneyForm, BetweenGDAXAndCBForm
 
