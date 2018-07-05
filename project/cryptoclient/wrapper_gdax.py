@@ -175,11 +175,11 @@ class GDAXApi():
 
 		# GET /products/<product-id>/candles
 
-		data = {
-			# 'start': start,
-			# 'end': end,
-			'granularity': granularity
-		}
+		# data = {
+		# 	# 'start': start,
+		# 	# 'end': end,
+		# 	'granularity': granularity
+		# }
 
 		r = requests.get(api_url + '/products/' + pair + '/candles?granularity=' + granularity, auth=auth)
 
