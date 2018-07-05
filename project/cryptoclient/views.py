@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.views.generic import View
+from datetime import date
 from cryptoclient.wrapper_coinbase import Wallet
 from cryptoclient.wrapper_gdax import GDAXApi
 from cryptoclient.wrapper_coinigy import CoinigyAPI
@@ -13,6 +14,16 @@ class OptionListView(View):
 	def get(self, request):
 		GDAX = GDAXApi()
 		bitcoin_data, ethereum_data = GDAX.market_data()
+
+		# start = date(2017, 12, 4).isoformat()
+		# end = date(2018, 7, 3).isoformat()
+		# print(start, end)
+		# granularity = 86400
+		# BTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'BTC-USD')
+		# ETH_candle_data = GDAX.get_candle_data(start, end, granularity, 'ETH-USD')
+		# LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
+		# print(len(BTC_candle_data))
+
 		# print(bitcoin_data, "1")
 		# print(ethereum_data, "2")
 		context = {
@@ -201,9 +212,18 @@ class BuySellView(View):
 		crypto_pairs = GDAX.get_crypto_pairs()
 		crypto_price = GDAX.get_current_data('BTC-USD')
 		# print(crypto_price)
-		print("XOXOXOXOXOXOXOOXOXOXOXOXO")
+		# print("XOXOXOXOXOXOXOOXOXOXOXOXO")
 
 		all_open_orders = GDAX.get_all_open_orders()
+
+		start = date(2017, 12, 4).isoformat()
+		end = date(2018, 7, 3).isoformat()
+		print(start, end)
+		granularity = 86400
+		BTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'BTC-USD')
+		ETH_candle_data = GDAX.get_candle_data(start, end, granularity, 'ETH-USD')
+		LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
+		print(len(BTC_candle_data))
 
 
 		# if price > crypto_price['price']:

@@ -47,7 +47,7 @@ class CoinigyAPI():
 	def authenticate(self):
 
 		auth = CoinigyApiAuth(api_key, api_secret)
-		print(auth)
+		
 		return auth
 
 	def list_accounts(self):

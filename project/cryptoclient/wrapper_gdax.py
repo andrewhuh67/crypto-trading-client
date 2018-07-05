@@ -1,5 +1,6 @@
 
 import json, hmac, hashlib, time, requests, base64
+from datetime import datetime
 from requests.auth import AuthBase
 from cryptoclient.credentials import CredentialsGDAX
 
@@ -21,6 +22,7 @@ class CoinbaseExchangeAuth(AuthBase):
 
 	def __call__(self, request):
 		timestamp = str(time.time())
+		# print(timestamp, "timestamp")
 		message = timestamp + request.method + request.path_url + (request.body or b'').decode()
 		hmac_key = base64.b64decode(self.secret_key)
 		signature = hmac.new(hmac_key, message.encode(), hashlib.sha256)
@@ -163,6 +165,25 @@ class GDAXApi():
 
 		response = r.json()
 
+		return response
+
+	def get_candle_data(self, start, end, granularity, pair):
+		auth = self.auth()
+
+		cryptopairs = self.get_crypto_pairs()
+		print(cryptopairs)
+
+		# GET /products/<product-id>/candles
+
+		data = {
+			'start': start,
+			'end': end,
+			'granularity': granularity
+		}
+
+		r = requests.get(api_url + '/products/' + pair + '/candles', json=data, auth=auth)
+
+		response = r.json()
 		return response
 
 
