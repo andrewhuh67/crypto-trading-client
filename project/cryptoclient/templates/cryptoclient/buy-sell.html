@@ -16,6 +16,10 @@
 	<h3><a href="{% url 'cryptoclient:buy-sell-order' %}">Orders</a></h3>
 	<h3><a href="{% url 'cryptoclient:buy-sell-accounts' %}">Accounts</a></h3>
 
+	<div>
+		{{graph}}
+	</div>
+
 
 	<ol>
 		{% for account in accounts %}

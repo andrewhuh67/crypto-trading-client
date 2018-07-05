@@ -171,17 +171,17 @@ class GDAXApi():
 		auth = self.auth()
 
 		cryptopairs = self.get_crypto_pairs()
-		print(cryptopairs)
+		# print(cryptopairs)
 
 		# GET /products/<product-id>/candles
 
 		data = {
-			'start': start,
-			'end': end,
+			# 'start': start,
+			# 'end': end,
 			'granularity': granularity
 		}
 
-		r = requests.get(api_url + '/products/' + pair + '/candles', json=data, auth=auth)
+		r = requests.get(api_url + '/products/' + pair + '/candles?granularity=' + granularity, auth=auth)
 
 		response = r.json()
 		return response

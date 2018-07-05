@@ -1,6 +1,12 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.views.generic import View
 from datetime import date
+import pandas as pd
+pd.core.common.is_list_like = pd.api.types.is_list_like
+import pandas_datareader.data as web
+import matplotlib.pyplot as plt 
+from matplotlib import style
+import numpy as np
 from cryptoclient.wrapper_coinbase import Wallet
 from cryptoclient.wrapper_gdax import GDAXApi
 from cryptoclient.wrapper_coinigy import CoinigyAPI
@@ -218,12 +224,36 @@ class BuySellView(View):
 
 		start = date(2017, 12, 4).isoformat()
 		end = date(2018, 7, 3).isoformat()
-		print(start, end)
-		granularity = 86400
+		# print(start, end)
+		style.use('ggplot')
+		granularity = '86400'
 		BTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'BTC-USD')
 		ETH_candle_data = GDAX.get_candle_data(start, end, granularity, 'ETH-USD')
 		LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
-		print(len(BTC_candle_data))
+		# print(BTC_candle_data)
+		BTC_close_data = []
+		for line in BTC_candle_data:	
+			BTC_close_data.append(line[4])
+
+		dataframe = pd.DataFrame(
+		    {'BTC-USD': BTC_close_data
+		    })
+
+		# print(dataframe)
+
+		# dataframe.to_csv('crypto_data_csv/BTC-USD.csv')
+
+		graph = dataframe.plot()
+
+		# print(graph)
+		# BTC_candle_data
+		# df = pd.DataFrame()
+		# df = df.join(BTC_candle_data)
+		# df.to_csv('crypto_data_csv/BTC-USD.csv')
+
+
+
+
 
 
 		# if price > crypto_price['price']:
@@ -237,7 +267,8 @@ class BuySellView(View):
 			'accounts':accounts,
 			'form':purchaseorderform,
 			'crypto_pairs':crypto_pairs,
-			'open_orders':all_open_orders
+			'open_orders':all_open_orders,
+			'graph':graph
 		}
 
 		return render(request, 'cryptoclient/buy-sell.html', context)
