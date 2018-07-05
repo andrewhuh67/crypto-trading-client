@@ -225,25 +225,25 @@ class BuySellView(View):
 		start = date(2017, 12, 4).isoformat()
 		end = date(2018, 7, 3).isoformat()
 		# print(start, end)
-		style.use('ggplot')
+		# style.use('ggplot')
 		granularity = '86400'
 		BTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'BTC-USD')
 		ETH_candle_data = GDAX.get_candle_data(start, end, granularity, 'ETH-USD')
 		LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
 		# print(BTC_candle_data)
-		BTC_close_data = []
-		for line in BTC_candle_data:	
-			BTC_close_data.append(line[4])
+		print(BTC_candle_data)
+		# for line in BTC_candle_data:	
+		# 	BTC_close_data.append(line[4])
 
-		dataframe = pd.DataFrame(
-		    {'BTC-USD': BTC_close_data
-		    })
+		# dataframe = pd.DataFrame(
+		#     {'BTC-USD': BTC_close_data
+		# })
 
 		# print(dataframe)
 
 		# dataframe.to_csv('crypto_data_csv/BTC-USD.csv')
 
-		graph = dataframe.plot()
+		# graph = dataframe.plot()
 
 		# print(graph)
 		# BTC_candle_data
@@ -267,8 +267,7 @@ class BuySellView(View):
 			'accounts':accounts,
 			'form':purchaseorderform,
 			'crypto_pairs':crypto_pairs,
-			'open_orders':all_open_orders,
-			'graph':graph
+			'open_orders':all_open_orders,	
 		}
 
 		return render(request, 'cryptoclient/buy-sell.html', context)

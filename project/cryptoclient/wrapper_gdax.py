@@ -186,6 +186,13 @@ class GDAXApi():
 		response = r.json()
 		return response
 
+	def get_close_data(list_data):
+		close_data = []
+		for line in list_data:
+			
+			# close_data.append(line[)
+		return close_data
+
 
 
 
