@@ -224,19 +224,21 @@ class BuySellView(View):
 
 		all_open_orders = GDAX.get_all_open_orders()
 
-		start = date(2017, 12, 4).isoformat()
-		end = date(2018, 7, 3).isoformat()
+
+
+		# start = date(2017, 12, 4).isoformat()
+		# end = date(2018, 7, 3).isoformat()
 		# print(start, end)
 		# style.use('ggplot')
-		granularity = '86400'
+		# granularity = '86400'
 		# BTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'BTC-USD')
 		# ETH_candle_data = GDAX.get_candle_data(start, end, granularity, 'ETH-USD')
-		LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
+		# LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
 		# print(ETH_candle_data)
 		# print(BTC_candle_data)
 		# BTC_close_data = GDAX.get_close_data(BTC_candle_data)
 		# ETH_close_data = GDAX.get_close_data(ETH_candle_data)
-		LTC_close_data = GDAX.get_close_data(LTC_candle_data)
+		# LTC_close_data = GDAX.get_close_data(LTC_candle_data)
 		# print(LTC_close_data)
 		# print(ETH_close_data)
 
@@ -284,7 +286,7 @@ class BuySellView(View):
 			'form':purchaseorderform,
 			'crypto_pairs':crypto_pairs,
 			'open_orders':all_open_orders,
-			'LTC_close_data':json.dumps(LTC_close_data)	
+			# 'LTC_close_data':json.dumps(LTC_close_data)	
 		}
 
 		return render(request, 'cryptoclient/buy-sell.html', context)
@@ -358,19 +360,20 @@ class BuySellDataView(View):
 
 		GDAX = GDAXApi()
 
+
 		start = date(2017, 12, 4).isoformat()
 		end = date(2018, 7, 3).isoformat()
 		# print(start, end)
 		# style.use('ggplot')
 		granularity = '86400'
-		# BTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'BTC-USD')
+		BTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'BTC-USD')
 		# ETH_candle_data = GDAX.get_candle_data(start, end, granularity, 'ETH-USD')
-		LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
+		# LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
 		# print(ETH_candle_data)
 		# print(BTC_candle_data)
-		# BTC_close_data = GDAX.get_close_data(BTC_candle_data)
+		BTC_close_data = GDAX.get_close_data(BTC_candle_data)
 		# ETH_close_data = GDAX.get_close_data(ETH_candle_data)
-		LTC_close_data = GDAX.get_close_data(LTC_candle_data)
+		# LTC_close_data = GDAX.get_close_data(LTC_candle_data)
 		# print(LTC_candle_data)
 
 		# ltc_json = GDAX.to_json(LTC_close_data)
@@ -382,15 +385,19 @@ class BuySellDataView(View):
 
 		# url(r'^crypto/buy-sell/data$', views.BuySellDataView.as_view(), name="buy-sell-data"),
 		# print(ltc_json)
-		ltc_json = {}
-		LTC_close_data.insert(0, 'ltc')
+		crypto_json = {}
+		BTC_close_data.insert(0, 'BTC')
+		# ETH_close_data.insert(0, 'ETH')
+		# LTC_close_data.insert(0, 'LTC')
 		# print(LTC_close_data)
-		ltc_json['ltc'] = LTC_close_data
+		# crypto_json['LTC'] = LTC_close_data
+		crypto_json['BTC'] = BTC_close_data
+		# crypto_json['ETH'] = ETH_close_data
 
 		
-		print(ltc_json)
-
-		return JsonResponse(ltc_json)
+		# print(ltc_json)
+		print(crypto_json, "wow")
+		return JsonResponse(crypto_json)
 
 class BuySellOrderView(View):
 
@@ -567,8 +574,8 @@ class SwapCryptoView(View):
 		# not going to allow limit trading.
 		price_type_id = '3'
 
-		print('XOXOXOXOXOXOXO')
-		print(order_types['data'], 'order_type')
+		# print('XOXOXOXOXOXOXO')
+		# print(order_types['data'], 'order_type')
 		exchanges = coinigy.list_exchanges()
 		
 		# print(exchanges, 'exchange')

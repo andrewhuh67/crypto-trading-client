@@ -23,6 +23,8 @@ from project.local_settings import *
 
 ALLOWED_HOSTS = []
 
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
 
 # Application definition
 
@@ -35,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cryptoclient',
     'rest_framework',
+    'bootstrap3',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +67,7 @@ TEMPLATES = [
             ],
         },
     },
+    
 ]
 
 WSGI_APPLICATION = 'project.wsgi.application'
