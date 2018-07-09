@@ -1,11 +1,23 @@
 jQuery(document).ready(function() {
-	var chart = c3.generate({
-	    bindto: '#chart',
-	    data: {
-	    	columns: [
-	       		['data1', 30, 200, 100, 400, 150, 250, 200],
-	        	['data2', 50, 20, 10, 40, 15, 25, 200]
-	      	]
-	    }
-	});
+	
+	// var closeData = {}
+	$.ajax({
+        type: "GET",
+        url: "data",
+        dataType: "json",
+        success: function(data) {
+        	console.log(data)
+        	var chart = c3.generate({
+	    		bindto: '#chart',
+	    		data: {
+	    			columns: [
+	       				data['ltc'],
+	        			// ['data2', 50, 20, 10, 40, 15, 25, 200]
+	      			]
+	    		}
+			});
+
+        }
+    });
+
 });

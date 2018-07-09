@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^crypto/wallet/wallet-address/$', views.WalletAddressView.as_view(), name="wallet-address"),
     url(r'^crypto/wallet/coinbase-gdax-transfer/$', views.WalletCoinbaseGDAXTransferView.as_view(), name="coinbase-gdax-transfer"),
     url(r'^crypto/buy-sell/$', views.BuySellView.as_view(), name="buy-sell"),
+    url(r'^crypto/buy-sell/data$', views.BuySellDataView.as_view(), name="buy-sell-data"),
     url(r'^crypto/buy-sell/orders/$', views.BuySellOrderView.as_view(), name="buy-sell-order"),
     url(r'^crypto/buy-sell/accounts/$', views.BuySellAccountsView.as_view(), name="buy-sell-accounts"),
     url(r'^crypto/profile/$', views.ProfileView.as_view(), name="profile"),

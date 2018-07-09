@@ -9,8 +9,8 @@
 {% block header %}
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet" />
-    <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
 	
 	
 {% endblock header %}
@@ -27,21 +27,27 @@
 		
 	</div>
 
-	<!-- <script type="text/javascript">
-		jQuery(document).ready(function () {
-			var chart = c3.generate({
-		    	bindto: '#chart',
-		    	data: {
-		   		columns: [
-		       		['data1', 30, 200, 100, 400, 150, 250],
-		       		['data3', 50, 20, 10, 40, 15, 25, 200]
-		      		]
-		    	}
-			});
-		});
-		
-	</script> -->
+	<div class="tab">
+		<button class="tablinks" onclick="openCity(event, 'London')">London</button>
+		<button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
+		<button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+	</div>
 
+
+	<div id="London" class="tabcontent">
+		<h3>London</h3>
+		<p>London is the capital city of England.</p>
+	</div>
+
+	<div id="Paris" class="tabcontent">
+		<h3>Paris</h3>
+		<p>Paris is the capital of France.</p> 
+	</div>
+
+	<div id="Tokyo" class="tabcontent">
+		<h3>Tokyo</h3>
+		<p>Tokyo is the capital of Japan.</p>
+	</div>
 	
 
 
@@ -57,9 +63,9 @@
 	</ol> -->
 
 	<form action="{% url 'cryptoclient:buy-sell' %}" method="POST">
-	    {% csrf_token %}
-	    {{ form }}
-	    <input type="submit" value="Submit" />
+		{% csrf_token %}
+		{{ form }}
+		<input type="submit" value="Submit" />
 	</form>
 
 

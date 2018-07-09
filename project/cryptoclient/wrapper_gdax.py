@@ -1,5 +1,5 @@
 
-import json, hmac, hashlib, time, requests, base64
+import json, hmac, hashlib, time, requests, base64, csv, os
 from datetime import datetime
 from requests.auth import AuthBase
 from cryptoclient.credentials import CredentialsGDAX
@@ -186,12 +186,49 @@ class GDAXApi():
 		response = r.json()
 		return response
 
-	def get_close_data(list_data):
+	def get_close_data(self, list_data):
 		close_data = []
+
 		for line in list_data:
-			
-			# close_data.append(line[)
+			close = line[4]
+			close_data.append(close)
+		close_data.reverse()
+
 		return close_data
+
+	def to_csv(self, close_data, pair):
+
+		if not os.path.exists('crypto_data_csv'):
+			os.makedirs('crypto_data_csv')
+
+
+		# csv = open("crypto_data_csv/{}.csv".format(pair), "w")
+
+		# csv.write(close_data)
+
+		with open('crypto_data_csv/{}.csv'.format(pair), 'w', newline='') as f:
+			writer = csv.writer(f)
+			for val in range(0, len(close_data)):
+				# print(close_data[val], type(close_data[val]))
+				close_data[val] = str(close_data[val])
+				# print(type(close_data[val])) 
+
+			# print(type(close_data))
+			for item in close_data:
+				# print(type(item))
+				writer.writerow(item)
+
+	def to_json(self, close_data):
+
+		chart_data = {}
+
+		for item in range(0, len(close_data)):
+			chart_data[str(item)] = str(close_data[item])
+
+		return chart_data
+
+
+
 
 
 

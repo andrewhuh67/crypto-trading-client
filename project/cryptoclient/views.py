@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
+from django.http import JsonResponse
+import json
 from django.views.generic import View
 from datetime import date
 import pandas as pd
@@ -227,11 +229,23 @@ class BuySellView(View):
 		# print(start, end)
 		# style.use('ggplot')
 		granularity = '86400'
-		BTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'BTC-USD')
-		ETH_candle_data = GDAX.get_candle_data(start, end, granularity, 'ETH-USD')
+		# BTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'BTC-USD')
+		# ETH_candle_data = GDAX.get_candle_data(start, end, granularity, 'ETH-USD')
 		LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
+		# print(ETH_candle_data)
 		# print(BTC_candle_data)
-		print(BTC_candle_data)
+		# BTC_close_data = GDAX.get_close_data(BTC_candle_data)
+		# ETH_close_data = GDAX.get_close_data(ETH_candle_data)
+		LTC_close_data = GDAX.get_close_data(LTC_candle_data)
+		# print(LTC_close_data)
+		# print(ETH_close_data)
+
+		# GDAX.to_csv(BTC_close_data, 'BTC-USD')
+		# GDAX.to_csv(ETH_close_data, 'ETH-USD')
+		# GDAX.to_csv(LTC_close_data, 'LTC-USD')
+
+
+
 		# for line in BTC_candle_data:	
 		# 	BTC_close_data.append(line[4])
 
@@ -250,6 +264,8 @@ class BuySellView(View):
 		# df = pd.DataFrame()
 		# df = df.join(BTC_candle_data)
 		# df.to_csv('crypto_data_csv/BTC-USD.csv')
+		
+
 
 
 
@@ -267,7 +283,8 @@ class BuySellView(View):
 			'accounts':accounts,
 			'form':purchaseorderform,
 			'crypto_pairs':crypto_pairs,
-			'open_orders':all_open_orders,	
+			'open_orders':all_open_orders,
+			'LTC_close_data':json.dumps(LTC_close_data)	
 		}
 
 		return render(request, 'cryptoclient/buy-sell.html', context)
@@ -334,6 +351,46 @@ class BuySellView(View):
 		else:
 			print('form is broken')
 			return redirect('cryptoclient:buy-sell')
+
+class BuySellDataView(View):
+
+	def get(self, request):
+
+		GDAX = GDAXApi()
+
+		start = date(2017, 12, 4).isoformat()
+		end = date(2018, 7, 3).isoformat()
+		# print(start, end)
+		# style.use('ggplot')
+		granularity = '86400'
+		# BTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'BTC-USD')
+		# ETH_candle_data = GDAX.get_candle_data(start, end, granularity, 'ETH-USD')
+		LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
+		# print(ETH_candle_data)
+		# print(BTC_candle_data)
+		# BTC_close_data = GDAX.get_close_data(BTC_candle_data)
+		# ETH_close_data = GDAX.get_close_data(ETH_candle_data)
+		LTC_close_data = GDAX.get_close_data(LTC_candle_data)
+		# print(LTC_candle_data)
+
+		# ltc_json = GDAX.to_json(LTC_close_data)
+		# print(ETH_close_data)
+
+		# GDAX.to_csv(BTC_close_data, 'BTC-USD')
+		# GDAX.to_csv(ETH_close_data, 'ETH-USD')
+		# GDAX.to_csv(LTC_close_data, 'LTC-USD')
+
+		# url(r'^crypto/buy-sell/data$', views.BuySellDataView.as_view(), name="buy-sell-data"),
+		# print(ltc_json)
+		ltc_json = {}
+		LTC_close_data.insert(0, 'ltc')
+		# print(LTC_close_data)
+		ltc_json['ltc'] = LTC_close_data
+
+		
+		print(ltc_json)
+
+		return JsonResponse(ltc_json)
 
 class BuySellOrderView(View):
 
