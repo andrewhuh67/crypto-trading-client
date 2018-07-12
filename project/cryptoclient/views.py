@@ -23,17 +23,6 @@ class OptionListView(View):
 		GDAX = GDAXApi()
 		bitcoin_data, ethereum_data = GDAX.market_data()
 
-		# start = date(2017, 12, 4).isoformat()
-		# end = date(2018, 7, 3).isoformat()
-		# print(start, end)
-		# granularity = 86400
-		# BTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'BTC-USD')
-		# ETH_candle_data = GDAX.get_candle_data(start, end, granularity, 'ETH-USD')
-		# LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
-		# print(len(BTC_candle_data))
-
-		# print(bitcoin_data, "1")
-		# print(ethereum_data, "2")
 		context = {
 			'bitcoin_data':bitcoin_data,
 			'ethereum_data':ethereum_data
@@ -48,13 +37,6 @@ class WalletListView(View):
 
 		
 		list_wallets = auth.list_wallets()
-		# list_wallets = list_wallets['data']
-		
-		
-
-		# list_wallets = auth.get_addresses()
-		# print(auth.get_addresses(), "walletlistview")
-		print(list_wallets, "list_wallets")
 
 		context = {
 			"wallets": list_wallets['data']
@@ -81,7 +63,7 @@ class WalletCreateView(View):
 		
 		if walletcreationform.is_valid():
 			name = request.POST["name"]
-			# print(name)
+			
 			auth = Wallet()
 			address = auth.create_wallet(name)
 			return redirect(self.success_url)
@@ -104,9 +86,7 @@ class WalletAddressView(View):
 		
 
 		list_address = auth.get_addresses()
-		# print(list_address)
-		# print(auth.get_addresses(), "walletlistview")
-
+		
 		context = {
 			"addresses": list_address,
 			"wallets": list_wallets
@@ -226,60 +206,7 @@ class BuySellView(View):
 
 
 
-		# start = date(2017, 12, 4).isoformat()
-		# end = date(2018, 7, 3).isoformat()
-		# print(start, end)
-		# style.use('ggplot')
-		# granularity = '86400'
-		# BTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'BTC-USD')
-		# ETH_candle_data = GDAX.get_candle_data(start, end, granularity, 'ETH-USD')
-		# LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
-		# print(ETH_candle_data)
-		# print(BTC_candle_data)
-		# BTC_close_data = GDAX.get_close_data(BTC_candle_data)
-		# ETH_close_data = GDAX.get_close_data(ETH_candle_data)
-		# LTC_close_data = GDAX.get_close_data(LTC_candle_data)
-		# print(LTC_close_data)
-		# print(ETH_close_data)
-
-		# GDAX.to_csv(BTC_close_data, 'BTC-USD')
-		# GDAX.to_csv(ETH_close_data, 'ETH-USD')
-		# GDAX.to_csv(LTC_close_data, 'LTC-USD')
-
-
-
-		# for line in BTC_candle_data:	
-		# 	BTC_close_data.append(line[4])
-
-		# dataframe = pd.DataFrame(
-		#     {'BTC-USD': BTC_close_data
-		# })
-
-		# print(dataframe)
-
-		# dataframe.to_csv('crypto_data_csv/BTC-USD.csv')
-
-		# graph = dataframe.plot()
-
-		# print(graph)
-		# BTC_candle_data
-		# df = pd.DataFrame()
-		# df = df.join(BTC_candle_data)
-		# df.to_csv('crypto_data_csv/BTC-USD.csv')
 		
-
-
-
-
-
-
-
-		# if price > crypto_price['price']:
-		# 	stop = 'loss'
-
-		# elif price < crypto_price['price']:
-		# 	stop = 'entry'
-		# order = GDAX.create_order()
 
 		context = {
 			'accounts':accounts,
@@ -291,15 +218,6 @@ class BuySellView(View):
 
 		return render(request, 'cryptoclient/buy-sell.html', context)
 
-	# ORDER_CHOICES = (
- #    (1, ("Market Order")),
- #    (2, ("Limit Order"))
-    
-	# )
-	# SIDE_CHOICES = (
-	#     (1, ("Buy")),
-	#     (2, ("Sell"))
-	# )
 
 	def post(self, request):
 		purchaseorderform = self.form_class(request.POST)
