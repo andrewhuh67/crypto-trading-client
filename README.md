@@ -13,10 +13,14 @@ In order to use this application, you need to do a couple of things.
 3. need a credentials.py file in the cryptoclient application folder in order to have access to the accounts. There is a markdown file of what the credentials file is suppose to look. Copy the template over and make sure the keys are in strings.
 4. in order to make requests to coinbase, the unix time on your computer has to be within 30 seconds of that of coinbase. Simpliest way of changing it is to change the time on your computer.
 
-Git clone the application \n
-virtualenv env \n
+Git clone the application 
+
+virtualenv env 
+
 source env/bin/activate
+
 pip install -r requirements.txt
+
 then go to the folder with manage.py and do python3 manage.py runserver
 
 
