@@ -21,16 +21,15 @@
 	
 	<!-- <h1>{{auth.auth_nickname}}</h1> -->
 	<h1>{{auth.exch_name}}</h1>
-
+	<h3>List of your Tokens </h3>
 	{% for balance in balances %}
-		<h3>CryptoCurrency Symbol</h3>
-		<li>{{balance.balance_curr_code}}</li>
-		<h3>Balance Available</h3>
-		<li>{{balance.balance_amount_avail}}</li>
-		<h3>Value in Bitcoin</h3>
-		<li>{{balance.btc_balance}}</li>
-		<h3>Total Balance</h3>
-		<li>{{balance.balance_amount_total}}</li>
+		
+		<p>Name: {{balance.balance_curr_code}}</p>
+		
+		<p>Balance Available: {{balance.balance_amount_avail}}</p>
+		
+		
+		
 	{% endfor %}
 
 	<form action="{% url 'cryptoclient:swap-crypto' %}" method="POST">
