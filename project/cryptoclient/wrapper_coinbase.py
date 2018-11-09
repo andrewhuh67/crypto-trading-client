@@ -16,7 +16,7 @@ class Wallet():
 			API_KEY,
 			API_SECRET)
 		if client:
-			print(client, "client wrapper")
+			# print(client, "client wrapper")
 			return client
 		else:
 			print("authentication failed")
@@ -33,8 +33,8 @@ class Wallet():
 
 		account = auth.create_account(name=str(name))
 		address = account.create_address()
-		print(address, "address")
-		print(dir(account), "dir")
+		# print(address, "address")
+		# print(dir(account), "dir")
 		account.address = address
 		balance = account.balance
 		print("{}:{}{}--{}".format(account.name, balance.amount, balance.currency, account.address), "create_wallet")
@@ -44,7 +44,7 @@ class Wallet():
 
 		auth = self.authenticate()
 		primary_account = auth.get_primary_account()
-		print(primary_account)
+		# print(primary_account)
 		return primary_account
 
 	def get_accounts(self):
@@ -56,20 +56,20 @@ class Wallet():
 	def get_primary_transactions(self):
 		auth = self.authenticate()
 		primary_account = auth.get_primary_account()
-		print(primary_account.get_transactions())
+		# print(primary_account.get_transactions())
 		transactions = primary_account.get_transactions()
 		return transactions
 	def get_all_transactions(self, account_id):
 		auth = self.authenticate()
 		
-		print(auth.get_transactions(account_id))
+		# print(auth.get_transactions(account_id))
 		transactions = auth.get_transactions(account_id)
 		return transactions
 
 	def get_total_account_value(self):
 		auth = self.authenticate()
 		accounts = auth.get_accounts()['data']
-		print(accounts)
+		# print(accounts)
 		total_account_value = 0
 		for account in accounts:
 			total_account_value += float(account['native_balance']['amount'])
@@ -113,7 +113,7 @@ class Wallet():
 		# print(account_ids, "account_ids")
 		address_list = []
 		for key in account_ids:
-			print(key)
+			# print(key)
 			if key == 'USD':
 				continue
 			# print(account_ids[key], "item")

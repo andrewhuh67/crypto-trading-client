@@ -1,24 +1,28 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 
 class PastBuySell(models.Model):
-	pass
-	# order_type = 
-	# asset_class = 
-	# last_price = 
-	# trade_volume = 
-	# timestamp = 
+
+	# order_type = buy or sell
+	# asset_class = example = BTC/USD
+	# dollar amount
+	
+	order_type = models.CharField(max_length=5)
+	asset_class = models.CharField(max_length=10)
+	last_price = models.CharField(max_length=20)
+	trade_volume = models.CharField(max_length=20)
+	timestamp = models.DateTimeField(default=timezone.now)
 
 
 class PastSwaps(models.Model):
-	pass
-	# crypto_pair =
-	# last_price = 
-	# amount_of_crypto_spent =
-	# amount_of_crypto_received =
-	# timestamp = 
-
+	
+	crypto_pair = models.CharField(max_length=10)
+	last_price = models.CharField(max_length=10)
+	amount_of_crypto_spent = models.CharField(max_length=20)
+	amount_of_crypto_received = models.CharField(max_length=20)
+	timestamp = models.DateTimeField(default=timezone.now)
 
 
 

@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-	<p>Profile</p>
+	<p>List Wallets</p>
 {% endblock title %}
 
 {% block header %}
@@ -16,35 +16,28 @@
 {% endblock header %}
 	
 {% block main %}
-	<h1>Profile</h1>
+	<!-- <h3><a href="{% url 'cryptoclient:wallet-create' %}">Create Wallet</a></h3> -->
+	<!-- <h3><a href="{% url 'cryptoclient:wallet-address' %}">Wallet Addresses</a></h3>
 	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
-	<h1>Total Account Value</h1>
-	
-	<h2>{{account_value}}</h2>
+	<h3><a href="{% url 'cryptoclient:coinbase-gdax-transfer' %}">Coinbase-GDAX Transfer</a></h3> -->
+	<h3>Wallet List</h3>
+
+
+	<div class="container">
+		
+			
+		{% for balance in balances %}
+			<ul>
+				<p>Name: {{balance.balance_curr_code}}</p>
+		
+				<p>Balance Available: {{balance.balance_amount_avail}}</p>		
+			</ul>
+		{% endfor %}
+			
+		
+	</div>
 
 	
-	<h2>Past Transactions</h2>
-	{% for transaction in past_buysell_transactions %}
-		<h2>---------------------------------------------------------------</h2>
-		
-		<h3>Transaction Amount:</h3>
-		<li>{{transaction.amount}}</li>
-		<h3>Transaction Date</h3>
-		<li>{{transaction.created_at}}</li>
-		{% if transaction.to %}
-			<h2>To address:</h2>
-			<li>{{transaction.to.address}}</li>
-			<h2>Currency</h2>
-			<li>{{transaction.to.currency}}</li>
-		{% endif %}
-		{% if transaction.buy %}
-			<h2>Amount:</h2>
-			<li>{{transaction.native_amount.amount}}</li>
-			<h2>Currency</h2>
-			<li>{{transaction.native_amount.currency}}</li>
-		{% endif %}
-		<h3>Transaction Description</h3>
-		<li>{{transaction.details.title}}</li>
-	{% endfor %}
+
 
 {% endblock main %}

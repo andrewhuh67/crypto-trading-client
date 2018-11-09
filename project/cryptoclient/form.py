@@ -90,6 +90,10 @@ class BetweenGDAXAndCBForm(forms.Form):
                                 widget=forms.Select(),
                                 required=True
                                 )
+
+class ChartForm(forms.Form):
+
+	pair = forms.CharField(max_length=20)
 								
 
 

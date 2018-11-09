@@ -157,6 +157,19 @@ class CoinigyAPI():
 
 		return r.json()
 
+	def list_history_data(self):
+		auth = self.authenticate()
+
+		values = {
+			"exchange_code": "Binance",
+			"exchange_market": 'ETH/ICX',
+  			"type": "history"
+		}
+
+		r = requests.post(api_url + 'data', json=values, auth=auth)
+
+		return r.json()
+
 
 	
 

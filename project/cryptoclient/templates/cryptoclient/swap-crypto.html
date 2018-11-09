@@ -18,10 +18,12 @@
 	
 {% block main %}
 	<h1>Swap Crypto</h1>
+	<h3><a href="{% url 'cryptoclient:swap-crypto-wallet' %}">List of Wallets</a></h3>
+	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
 	
 	<!-- <h1>{{auth.auth_nickname}}</h1> -->
 	<h1>{{auth.exch_name}}</h1>
-	<h3>List of your Tokens </h3>
+	<!-- <h3>List of your Tokens </h3>
 	{% for balance in balances %}
 		
 		<p>Name: {{balance.balance_curr_code}}</p>
@@ -30,13 +32,20 @@
 		
 		
 		
-	{% endfor %}
+	{% endfor %} -->
+	<form action="{% url 'cryptoclient:swap-crypto' %}" method="POST">
+		{% csrf_token %}
+		{{ chart_form }}
+		<input class="btn btn-outline-primary" type="submit" value="Submit"/>
+	</form>
 
 	<form action="{% url 'cryptoclient:swap-crypto' %}" method="POST">
 	    {% csrf_token %}
 	    {% crispy form %}
-	    <input type="submit" value="Submit" />
+	    <input class="btn btn-outline-primary" type="submit" value="Submit"/>
 	</form>
+
+	
 	
 	
 

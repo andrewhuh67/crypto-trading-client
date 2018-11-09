@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^crypto/buy-sell/accounts/$', views.BuySellAccountsView.as_view(), name="buy-sell-accounts"),
     url(r'^crypto/profile/$', views.ProfileView.as_view(), name="profile"),
     url(r'^crypto/swap-crypto/$', views.SwapCryptoView.as_view(), name="swap-crypto"),
+    url(r'^crypto/swap-crypto/wallet/$', views.SwapCryptoWalletView.as_view(), name="swap-crypto-wallet")
 
 ]
 

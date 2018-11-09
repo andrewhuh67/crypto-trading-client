@@ -12,8 +12,9 @@ import numpy as np
 from cryptoclient.wrapper_coinbase import Wallet
 from cryptoclient.wrapper_gdax import GDAXApi
 from cryptoclient.wrapper_coinigy import CoinigyAPI
+from cryptoclient.wrapper_binance import BinanceAPI
 
-from cryptoclient.form import WalletCreationForm, LimitOrderForm, CryptoToCryptoForm, WalletSendMoneyForm, BetweenGDAXAndCBForm
+from cryptoclient.form import WalletCreationForm, LimitOrderForm, CryptoToCryptoForm, WalletSendMoneyForm, BetweenGDAXAndCBForm, ChartForm
 
 # Create your views here.
 
@@ -34,6 +35,9 @@ class WalletListView(View):
 	def get(self, request):
 
 		auth = Wallet()
+
+		accounts = auth.get_accounts()
+		print(accounts)
 
 		
 		list_wallets = auth.list_wallets()
@@ -154,6 +158,13 @@ class WalletCoinbaseGDAXTransferView(View):
 	form_class = BetweenGDAXAndCBForm
 
 	def get(self, request):
+		GDAX = GDAXApi()
+		# accounts = GDAX.get_accounts()
+		# print(accounts)
+		auth = Wallet()
+
+		accounts = auth.get_accounts()
+		print(accounts['data'])
 
 		transfer_form = self.form_class()
 		
@@ -164,21 +175,52 @@ class WalletCoinbaseGDAXTransferView(View):
 		return render(request, self.template_name, context)
 
 	def post(self, request):
+
+
+		auth = Wallet()
+
+		accounts = auth.get_accounts()
+		print(accounts)
+
 		GDAX = GDAXApi()
 		data = request.POST
+		# print(request.POST)
+		cb_accounts = GDAX.list_cb_accounts()
+		print(cb_accounts)
 		transfer_form = self.form_class(request.POST)
 
 		# get coinbase accounts
 		# match the accounts with the currency they chose
 
+		coinbase_account_id = request.POST['currency']
+		if coinbase_account_id == "1":
+			coinbase_account_id = "BTC"
+		elif coinbase_account_id == "2":
+			coinbase_account_id = "ETH"
+		elif coinbase_account_id == "3":
+			coinbase_account_id = "BCH"
+		elif coinbase_account_id == "4":
+			coinbase_account_id = "LTC"  
+
+		# accounts = GDAX.get_accounts()
+		# print(accounts)
+		for account in accounts['data']:
+			if coinbase_account_id == account['currency']:
+				print(coinbase_account_id)
+				coinbase_account_id = account['id']
+				print(coinbase_account_id)
+
+
 
 		if transfer_form.is_valid():
 			amount = request.POST['amount']
+			amount = float(amount)
 			currency = request.POST['currency']
 			transaction_type = request.POST['transaction']
 
 			if transaction_type == "1":
 				GDAX.withdraw_to_coinbase(amount, currency, coinbase_account_id)
+				print("got here")
 			elif transaction_type == "2":
 				GDAX.deposit_to_gdax(amount, currency, coinbase_account_id)
 
@@ -203,6 +245,12 @@ class BuySellView(View):
 		# print("XOXOXOXOXOXOXOOXOXOXOXOXO")
 
 		all_open_orders = GDAX.get_all_open_orders()
+
+		binance = BinanceAPI()
+
+		ping = binance.ping()
+
+		print(ping, "yesornowes")
 
 
 
@@ -384,9 +432,34 @@ class BuySellAccountsView(View):
 class ProfileView(View):
 
 	def get(self, request):
+
+		# list_of_all_ids = [litecoin_id, bitcoin_id, bitcoin_cash_id, ethereum_id, usd_id]
+		# list_of_all_binance_pairs = ['BCC/BTC', 'BTC/USDT', 'BCC/USDT', ]
+
+		list_of_all_pastbuysell_transactions = []
 		auth = Wallet()
 
+		binance = BinanceAPI()
+		binance_data = binance.get_past_trades()
+		ticker_data = binance.ticker()
+		print(ticker_data, "thisthisthisthis")
+		ticker_list = []
+
+		for ticker in ticker_data:
+			ticker_list.append(ticker['symbol'])
+		# print(ticker_list)
+
+		# for ticker in ticker_list:
+		# 	trades = binance.old_trades(ticker)
+			# print(trades)
+
+
+
+		# these are just the pastbuysell
+
 		# all_transactions = auth.get_all_transactions()
+
+		
 
 		all_accounts = auth.get_accounts()
 		# print(all_accounts, "all accounts")
@@ -396,6 +469,26 @@ class ProfileView(View):
 		ethereum_id = all_accounts['data'][3]['id']
 		usd_id = all_accounts['data'][1]['id']
 
+		list_of_all_ids = [litecoin_id, bitcoin_id, bitcoin_cash_id, ethereum_id, usd_id]
+
+		for crypto_id in list_of_all_ids:
+			transactions = auth.get_all_transactions(crypto_id)
+
+			number_of_transaction = len(transactions['data'])
+
+			for transaction in range(0, number_of_transaction-1):
+				# print(transactions['data'], "RIGHT HERE")
+				list_of_all_pastbuysell_transactions.append(transactions['data'][transaction])
+
+
+
+		# print(list_of_all_pastbuysell_transactions, "alltransaction")
+
+		newlist = sorted(list_of_all_pastbuysell_transactions, key=lambda k: k['created_at'], reverse=True) 
+
+		# print(newlist, "right here")
+
+
 		litecoin_transactions = auth.get_all_transactions(litecoin_id)
 		bitcoin_transactions = auth.get_all_transactions(bitcoin_id)
 		bitcoin_cash_transactions = auth.get_all_transactions(bitcoin_cash_id)
@@ -403,6 +496,8 @@ class ProfileView(View):
 		usd_transactions = auth.get_all_transactions(usd_id)
 		# print(litecoin_transactions['data'], "litecoin transasction")
 		total_account_value = auth.get_total_account_value()
+
+
 
 		# primary_account = auth.get_primary_account()
 		# primary_transactions = get_primary_transactions()
@@ -413,26 +508,47 @@ class ProfileView(View):
 
 		# balance = primary_account.balance
 		# context = {'primary_account':primary_account, 'all_transactions':all_transactions, 'primary_transactions':primary_transactions}
-		context = {'litecoin_transactions':litecoin_transactions['data'], 'account_value':total_account_value}
+		context = {'past_buysell_transactions':newlist, 'account_value':total_account_value}
 		return render(request, 'cryptoclient/profile.html', context)
 
 class WalletSendMoneyView(View):
 	pass
 	# primary_account.send_money(to=address.address, amount='0.01', currency='BTC', description='For being awesome!')
-		
+	
+
+class SwapCryptoWalletView(View):
+	
+	def get(self, request):
+		coinigy = CoinigyAPI()
+		balances = coinigy.list_balances()['data']
+		print(balances,"right here")
+
+		context = {
+			'balances': balances
+		}
+
+		return render(request, 'cryptoclient/swap-crypto-wallet.html', context)
+
+
+
 class SwapCryptoView(View):
 
 	form_class = CryptoToCryptoForm
+	form_class2 = ChartForm
 
 	def get(self, request):
 
 		cryptotocryptoform = self.form_class()
+		chart_form = self.form_class2()
 
 
 
 
 
 		coinigy = CoinigyAPI()
+
+		history = coinigy.list_history_data()
+		print(history)
 
 		orders = coinigy.list_orders()
 		print(orders)
@@ -477,12 +593,24 @@ class SwapCryptoView(View):
 			'auth':auth['data'][0],
 			'balances':balances['data'],
 			'form':cryptotocryptoform,
+			'chart_form': chart_form,
 			'orders':orders['data']
 		}
 
 		return render(request, 'cryptoclient/swap-crypto.html', context)
 
 	def post(self, request):
+
+		print(request.body, "here")
+		parsed_body = request.body.decode('ascii')
+		print(parsed_body)
+		split_body = parsed_body.split("&")
+		print(split_body)
+		requested_pair_data = split_body[1]
+		requested_pair = requested_pair_data.split("=")
+		just_requested_pair = requested_pair[1]
+		print(just_requested_pair)
+
 
 		coinigy = CoinigyAPI()
 		auth_id, exch_id, = coinigy.get_auth_and_exch_id()
@@ -544,8 +672,13 @@ class SwapCryptoView(View):
 			print(order)
 			print('executed')
 			return redirect('cryptoclient:swap-crypto')
+		# elif ChartForm.is_valid():
+
+
 		else:
 			return HttpResponse('Didnt Work')
+
+list_of_all_binance_pairs = []
 
 
 

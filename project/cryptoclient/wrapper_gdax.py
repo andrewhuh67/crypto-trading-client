@@ -151,7 +151,14 @@ class GDAXApi():
 	def withdraw_to_coinbase(self, amount, currency, coinbase_account_id):
 		auth = self.auth()
 
-		r = requests.post(api_url + 'withdrawals/coinbase-account', auth=auth)
+		values = {
+			'amount':amount,
+			'currency':currency,
+			'coinbase_account_id':coinbase_account_id
+		}
+		print(amount, currency, coinbase_account_id)
+
+		r = requests.post(api_url + 'withdrawals/coinbase-account', json=values, auth=auth)
 
 		response = r.json()
 
@@ -161,7 +168,15 @@ class GDAXApi():
 
 		auth = self.auth()
 
-		r = requests.post(api_url + 'deposits/coinbase-account', auth=auth)
+		values = {
+			'amount':amount,
+			'currency':currency,
+			'coinbase_account_id':coinbase_account_id
+		}
+
+		r = requests.post(api_url + 'deposits/coinbase-account', json=values, auth=auth)
+
+
 
 		response = r.json()
 
@@ -226,6 +241,17 @@ class GDAXApi():
 			chart_data[str(item)] = str(close_data[item])
 
 		return chart_data
+
+	def list_cb_accounts(self):
+		auth = self.auth()
+
+		
+
+		r = requests.get(api_url + '/coinbase-accounts', auth=auth)
+
+		response = r.json()
+
+		return response
 
 
 
