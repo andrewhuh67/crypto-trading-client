@@ -186,7 +186,7 @@ class WalletCoinbaseGDAXTransferView(View):
 		data = request.POST
 		# print(request.POST)
 		cb_accounts = GDAX.list_cb_accounts()
-		print(cb_accounts)
+		print(cb_accounts, "hererere")
 		transfer_form = self.form_class(request.POST)
 
 		# get coinbase accounts

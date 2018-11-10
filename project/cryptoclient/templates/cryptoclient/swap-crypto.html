@@ -11,13 +11,13 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <link href="{% static 'cryptoclient/css/style.css' %}" rel="stylesheet" type="text/css" />
+    
 	
 	
 {% endblock header %}
 	
 {% block main %}
-	<h1>Swap Crypto</h1>
+	<!-- <h1>Swap Crypto</h1> -->
 	<h3><a href="{% url 'cryptoclient:swap-crypto-wallet' %}">List of Wallets</a></h3>
 	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
 	
@@ -33,11 +33,11 @@
 		
 		
 	{% endfor %} -->
-	<form action="{% url 'cryptoclient:swap-crypto' %}" method="POST">
+	<!-- <form action="{% url 'cryptoclient:swap-crypto' %}" method="POST">
 		{% csrf_token %}
 		{{ chart_form }}
 		<input class="btn btn-outline-primary" type="submit" value="Submit"/>
-	</form>
+	</form> -->
 
 	<form action="{% url 'cryptoclient:swap-crypto' %}" method="POST">
 	    {% csrf_token %}

@@ -7,6 +7,10 @@ $( document ).ready(function(){
 				// console.log(data)
 				var chart = c3.generate({
 					bindto: '#chart',
+					size: {
+						height:60,
+						width:120
+					}
 					data: {
 						columns: [
 							data['BTC'],
