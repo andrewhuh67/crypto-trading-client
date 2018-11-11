@@ -101,9 +101,11 @@ class Wallet():
 		accounts = auth.get_accounts()
 		
 		accounts = accounts['data']
+		# print(accounts, "accounts")
 		
 		account_ids = {}
 		for account in accounts:
+			# print(account)
 			# print(account)
 			acc = account['currency']
 			# print(str(acc), "acc")
@@ -111,22 +113,39 @@ class Wallet():
 			account_ids[str(account['currency'])] = account['id']
 
 		# print(account_ids, "account_ids")
-		address_list = []
+		address_list = {}
 		for key in account_ids:
 			# print(key)
 			if key == 'USD':
 				continue
 			# print(account_ids[key], "item")
+			# print(key, "key")
 
 			single_account_id = account_ids[key]
+			# print(single_account_id, "single")
+			# print(single_account_id, "each account id")
 			address = auth.get_addresses(single_account_id)
-			
+			# print(address, "addressss")
+			if len(address['data']) == 0:
+				pass
+			else:
 
-			address = address['data'][0]
-			# print(address, "address")
-			address_list.append(address)
-		print(address_list)
-		return address_list
+				address_list[key] = address
+
+		# print(address_list)
+
+		
+		final_list_address = []
+		# print(address_list.items())
+		for key, value in address_list.items():
+			address_dict = {}
+			address_dict["key"] = key
+			address_dict["address"] = value['data'][0]['address']
+			# print(address_dict)
+			final_list_address.append(address_dict)
+
+		print(final_list_address)
+			
 
 		# print(accounts['data'], "get_addresses")
 		# accounts_data = accounts['data']
@@ -161,7 +180,7 @@ class Wallet():
 		# 	addresses.append(address)
 		# 	print(empty_list, "empty_list")
 
-		# return addresses
+		return final_list_address
 
 	def create_addresses(self, account_id):
 		auth = self.authenticate()

@@ -16,8 +16,104 @@
 {% endblock header %}
 	
 {% block main %}
+
+
+		<h1>Profile</h1>
+
+		
+		<h1>Total Account Value: {{account_value}}</h1>
+			
+		
+	
+	
+	<h2>Past Transactions</h2>
+	{% for transaction in past_buysell_transactions %}
+		
+		
+		<h3>Transaction Amount:</h3>
+		<li>{{transaction.amount}}</li>
+		<h3>Transaction Date</h3>
+		<li>{{transaction.created_at}}</li>
+		{% if transaction.to %}
+			<h2>To address:</h2>
+			<li>{{transaction.to.address}}</li>
+			<h2>Currency</h2>
+			<li>{{transaction.to.currency}}</li>
+		{% endif %}
+		{% if transaction.buy %}
+			<h2>Amount:</h2>
+			<li>{{transaction.native_amount.amount}}</li>
+			<h2>Currency</h2>
+			<li>{{transaction.native_amount.currency}}</li>
+		{% endif %}
+		<h3>Transaction Description</h3>
+		<li>{{transaction.details.title}}</li>
+	{% endfor %}
 	
 	<!-- <h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3> -->
+
+	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            
+            <!-- <div class="btn-toolbar mb-2 mb-md-0">
+              <div class="btn-group mr-2">
+                <button class="btn btn-sm btn-outline-secondary">Share</button>
+                <button class="btn btn-sm btn-outline-secondary">Export</button>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                <span data-feather="calendar"></span>
+                This week
+              </button>
+            </div> -->
+          </div>
+
+          <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
+
+          <h2>Wallet Details</h2>
+          <div class="table-responsive">
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                	
+					<th>Transaction Amount:</th>
+                  <th>Transaction Date:</th>
+                  <th>Asset:</th>
+                  <th>USD:</th>
+                  <th>Transaction Description</th>
+                  
+                  
+                </tr>
+              </thead>
+              <tbody>
+              {% for wallet in wallets %}
+	                <tr>
+	                	
+		                  <td>{{wallet.name}}</td>
+		                  <td>{{wallet.balance.amount}}</td>
+		                  <td>{{wallet.balance.currency}}</td>
+		                  <td>{{wallet.native_balance.amount}}</td>
+		                  
+	                  	
+	                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    
 	<div>
 		<h1>Profile</h1>
 

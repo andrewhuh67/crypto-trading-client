@@ -37,7 +37,7 @@ class CoinbaseExchangeAuth(AuthBase):
 		})
 		return request
 
-api_url = 'https://api.gdax.com/'
+api_url = 'https://api.pro.coinbase.com/'
 # auth = CoinbaseExchangeAuth(API_KEY, API_SECRET, API_PASS)
 
 # # Get accounts
@@ -158,7 +158,7 @@ class GDAXApi():
 		}
 		print(amount, currency, coinbase_account_id)
 
-		r = requests.post(api_url + '/withdrawals/coinbase-account', json=values, auth=auth)
+		r = requests.post(api_url + 'withdrawals/coinbase-account', json=values, auth=auth)
 
 		response = r.json()
 
@@ -168,14 +168,15 @@ class GDAXApi():
 
 		auth = self.auth()
 		print(amount, currency, coinbase_account_id)
+		print(type(amount), type(currency), type(coinbase_account_id))
 
 		values = {
-			'amount':amount,
-			'currency':currency,
-			'coinbase_account_id':coinbase_account_id
+			"amount":amount,
+			"currency":currency,
+			"coinbase_account_id":coinbase_account_id
 		}
 
-		r = requests.post(api_url + '/deposits/coinbase-account', json=values, auth=auth)
+		r = requests.post(api_url + 'deposits/coinbase-account', json=values, auth=auth)
 
 
 

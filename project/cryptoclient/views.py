@@ -13,6 +13,7 @@ from cryptoclient.wrapper_coinbase import Wallet
 from cryptoclient.wrapper_gdax import GDAXApi
 from cryptoclient.wrapper_coinigy import CoinigyAPI
 from cryptoclient.wrapper_binance import BinanceAPI
+from cryptoclient.wrapper_binance2 import Binance2Auth
 
 from cryptoclient.form import WalletCreationForm, LimitOrderForm, CryptoToCryptoForm, WalletSendMoneyForm, BetweenGDAXAndCBForm, ChartForm
 
@@ -85,11 +86,12 @@ class WalletAddressView(View):
 		
 		list_wallets = auth.list_wallets()
 		list_wallets = list_wallets['data']
-		print(list_wallets)
+		# print(list_wallets, "list_wallets")
 		
-		
+		# print(list_wallets)
 
 		list_address = auth.get_addresses()
+		# print(list_address)
 		
 		context = {
 			"addresses": list_address,
@@ -205,6 +207,7 @@ class WalletCoinbaseGDAXTransferView(View):
 		# accounts = GDAX.get_accounts()
 		# print(accounts)
 		for account in accounts['data']:
+			print(account['currency'])
 			if coinbase_account_id == account['currency']:
 				print(coinbase_account_id)
 				coinbase_account_id = account['id']
@@ -216,6 +219,15 @@ class WalletCoinbaseGDAXTransferView(View):
 			amount = request.POST['amount']
 			amount = float(amount)
 			currency = request.POST['currency']
+			if currency == "1":
+				currency = "BTC"
+			elif currency == "2":
+				currency = "ETH"
+			elif currency == "3":
+				currency = "BCH"
+			elif currency == "4":
+				currency = "LTC"
+			print(currency, "currency")
 			transaction_type = request.POST['transaction']
 
 			if transaction_type == "1":
@@ -520,7 +532,16 @@ class SwapCryptoWalletView(View):
 	
 	def get(self, request):
 		coinigy = CoinigyAPI()
+		binance2 = Binance2Auth()
+		tickers = binance2.get_all_tickers()
+		for item in tickers:
+			# print(item)
+			symbol = item['symbol']
+			print(symbol)
+			
+
 		balances = coinigy.list_balances()['data']
+
 		print(balances,"right here")
 
 		context = {

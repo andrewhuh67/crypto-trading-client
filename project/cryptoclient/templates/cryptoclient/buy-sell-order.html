@@ -16,16 +16,16 @@
 {% endblock header %}
 	
 {% block main %}
-	<h1>Buy/Sell Orders</h1>
+	<!-- <h1>Buy/Sell Orders</h1> -->
 
 	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
 	<h3><a href="{% url 'cryptoclient:buy-sell' %}">Buy/Sell</a></h3>
 
 	
 
-		{% for open_order in open_orders %}
+		<!-- {% for open_order in open_orders %}
 			<ol>
-				<h3>{{open_order.product_id}}</h3>
+				<h3>Currency:{{open_order.product_id}}</h3>
 				<li>Order Side: {{open_order.side}}</li>
 				<li>Order Type: {{open_order.type}}</li>
 				<li>Created At: {{open_order.created_at}}</li>
@@ -33,7 +33,74 @@
 				<li>Size: {{open_order.size}}</li>
 			
 			</ol>
-		{% endfor %}
+		{% endfor %} -->
+
+	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            
+            <!-- <div class="btn-toolbar mb-2 mb-md-0">
+              <div class="btn-group mr-2">
+                <button class="btn btn-sm btn-outline-secondary">Share</button>
+                <button class="btn btn-sm btn-outline-secondary">Export</button>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                <span data-feather="calendar"></span>
+                This week
+              </button>
+            </div> -->
+          </div>
+
+          <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
+
+          <h1>Buy/Sell Orders</h1>
+          <div class="table-responsive">
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                	
+					<th>Currency:</th>
+                  <th>Order Side:</th>
+                  <th>Order Type:</th>
+                  <th>Created At:</th>
+                  <th>Price:</th>
+                  <th>Size:</th>
+                  
+                  
+                  
+                </tr>
+              </thead>
+              <tbody>
+              {% for open_order in open_orders %}
+	                <tr>
+	                	
+		                  <td>{{open_order.product_id}}</td>
+		                  <td>{{open_order.side}}</td>
+		                  <td>{{open_order.type}}</td>
+		                  <td>{{open_order.created_at}}</td>
+		                  <td>${{open_order.price}}</td>
+		                  <td>{{open_order.size}}</td>
+		             
+		                  
+	                  	
+	                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
 
 	
 

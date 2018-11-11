@@ -20,24 +20,67 @@
 	<h3><a href="{% url 'cryptoclient:send-money' %}">Send Money</a></h3>
 	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
 
-	<h2>Coinbase Wallets</h2>
-	<h3>Wallet Address</h3>
-	<h3>YOU NEED TO COPY THE ADDRESS</h3>
-	<div class="container">
-		
-		<ul>
-			{% for wallet in addresses %}
-				<ul>
-					<h2>{{wallet.network}}</h2>
-					
 
-					
-					<li>ADDRESS: {{wallet.address}}</li>
-				</ul>
-			{% endfor %}
-		</ul>
-		
-	</div>
+	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            
+            <!-- <div class="btn-toolbar mb-2 mb-md-0">
+              <div class="btn-group mr-2">
+                <button class="btn btn-sm btn-outline-secondary">Share</button>
+                <button class="btn btn-sm btn-outline-secondary">Export</button>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                <span data-feather="calendar"></span>
+                This week
+              </button>
+            </div> -->
+          </div>
+
+          <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
+
+          <h1>Coinbase Wallets</h1>
+          <div class="table-responsive">
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                	
+					<th>Currency:</th>
+                  <th>Address:</th>
+                  
+                  
+                  
+                  
+                </tr>
+              </thead>
+              <tbody>
+              {% for wallet in addresses %}
+	                <tr>
+	                	
+		                  <td>{{wallet.key}}</td>
+		                  <td>{{wallet.address}}</td>
+		                  
+		             
+		                  
+	                  	
+	                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
 
 	
 
