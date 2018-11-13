@@ -41,7 +41,7 @@
 
 	<form action="{% url 'cryptoclient:swap-crypto' %}" method="POST">
 	    {% csrf_token %}
-	    {% crispy form %}
+	    {{form }}
 	    <input class="btn btn-outline-primary" type="submit" value="Submit"/>
 	</form>
 

@@ -70,8 +70,10 @@ class CoinigyAPI():
 	def create_order(self, auth_id, exch_id, mkt_id, order_type_id,price_type_id,limit_price, order_quantity):
 		auth = self.authenticate()
 
-		if price_type_id == 'limit':
+		if price_type_id == 'Limit':
 			price_type_id = str(3)
+
+		print(auth_id, exch_id, mkt_id, order_type_id, price_type_id, limit_price, order_quantity)
 
 
 		values = {
@@ -120,6 +122,7 @@ class CoinigyAPI():
 		auth = self.authenticate()
 
 		r = requests.post(api_url + 'OrderTypes', auth=auth)
+		# r = requests.post(api_url + 'OrderTypes', auth=auth)
 		# print(r.json())
 		return r.json()
 
@@ -167,6 +170,13 @@ class CoinigyAPI():
 		}
 
 		r = requests.post(api_url + 'data', json=values, auth=auth)
+
+		return r.json()
+
+	def get_open_orders(self):
+		auth = self.authenticate()
+
+		r = requests.post(api_url + 'orders', auth=auth)
 
 		return r.json()
 

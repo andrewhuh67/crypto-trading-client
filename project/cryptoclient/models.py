@@ -24,5 +24,6 @@ class PastSwaps(models.Model):
 	amount_of_crypto_received = models.CharField(max_length=20)
 	timestamp = models.DateTimeField(default=timezone.now)
 
-
-
+class UserAddresses(models.Model):
+	crypto = models.CharField(max_length=10)
+	address = models.CharField(max_length=150)

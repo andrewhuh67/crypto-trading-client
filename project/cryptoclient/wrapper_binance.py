@@ -1,8 +1,11 @@
 import json, hmac, hashlib, time, requests, base64
-from cryptoclient.credentials import CredentialsCoinigy
+from cryptoclient.credentials import CredentialsBinance
 from requests.auth import AuthBase
+import time
 
-credentials = CredentialsCoinigy()
+time_variable = time.time()
+
+credentials = CredentialsBinance()
 
 api_key = credentials.api_key()
 
@@ -75,6 +78,31 @@ class BinanceAPI():
 		r = requests.get(api_url + '/api/v1/klines', auth=auth)
 
 		return r.json()
+
+	def get_current_open_orders(self):
+
+		auth = self.authenticate()
+		print(time.time()* 1000)
+		print(type(time.time()))
+
+		values = {
+			"timestamp":int(time.time()*1000)
+		}
+
+		r = requests.get(api_url + '/api/v3/openOrders', json=values, auth=auth)
+
+		print(r)
+		return r.json()
+
+	def delete_order(self, order_id):
+
+		auth = self.authenticate()
+
+		values = {
+			'orderId': order_id
+		}
+
+		r = requests.delete(api_url + '/api/v3/order', json=values, auth=auth)
 
 
 

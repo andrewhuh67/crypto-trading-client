@@ -15,11 +15,11 @@
 {% endblock header %}
 	
 {% block main %}
-	<h3><a href="{% url 'cryptoclient:wallet-address' %}">Wallet Address</a></h3>
+	<!-- <h3><a href="{% url 'cryptoclient:wallet-address' %}">Wallet Address</a></h3> -->
 	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
 	<h3>Send Crypto to an Exchange or Wallet</h3>
 	
-	<form action="{% url 'cryptoclient:send-money' %}" method="POST">
+	<form action="{% url 'cryptoclient:swap-crypto-send-money' %}" method="POST">
 	    {% csrf_token %}
 	    {{ form }}
 	    <input type="submit" value="Submit" />

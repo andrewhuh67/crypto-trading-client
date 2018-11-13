@@ -256,6 +256,29 @@ class GDAXApi():
 
 		return response
 
+	def send_money(self, crypto_address, currency, amount):
+		auth = self.auth()
+		print(crypto_address,currency,type(amount))
+
+		values = {
+			"amount": float(amount),
+    		"currency": currency,
+    		"crypto_address": crypto_address
+		}
+		
+
+		r = requests.post(api_url + 'withdrawals/crypto',json=values, auth=auth)
+
+	def cancel_order(self, order_id):
+		auth = self.auth()
+
+		r = requests.delete(api_url + 'orders/' + order_id, auth=auth)
+
+		
+
+
+
+
 
 
 

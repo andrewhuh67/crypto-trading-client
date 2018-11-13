@@ -3,6 +3,7 @@ from django.http import JsonResponse
 import json
 from django.views.generic import View
 from datetime import date
+import time
 import pandas as pd
 pd.core.common.is_list_like = pd.api.types.is_list_like
 import pandas_datareader.data as web
@@ -14,8 +15,9 @@ from cryptoclient.wrapper_gdax import GDAXApi
 from cryptoclient.wrapper_coinigy import CoinigyAPI
 from cryptoclient.wrapper_binance import BinanceAPI
 from cryptoclient.wrapper_binance2 import Binance2Auth
+from cryptoclient.models import UserAddresses
 
-from cryptoclient.form import WalletCreationForm, LimitOrderForm, CryptoToCryptoForm, WalletSendMoneyForm, BetweenGDAXAndCBForm, ChartForm
+from cryptoclient.form import WalletCreationForm, LimitOrderForm, CryptoToCryptoForm, WalletSendMoneyForm, BetweenGDAXAndCBForm, ChartForm, SwapCryptoSendMoneyForm, DeleteOrderForm
 
 # Create your views here.
 
@@ -110,6 +112,7 @@ class WalletTransactionView(View):
 
 	def get(self, request):
 		transaction_form = self.form_class()
+
 		
 		context = {
 			'form':transaction_form
@@ -119,6 +122,8 @@ class WalletTransactionView(View):
 
 	def post(self, request):
 		auth = Wallet()
+		gdax = GDAXApi()
+		
 		data = request.POST
 
 		wallettransactionform = self.form_class(request.POST)
@@ -144,10 +149,11 @@ class WalletTransactionView(View):
 		if wallettransactionform.is_valid():
 			address = data['to_address']
 			amount = data['amount']
-
-
-			send_money = auth.send_money(account_id, address, amount, crypto)
-			print(send_money)
+			print(address, amount)
+			auth.send_money(address,amount,crypto, account_id)
+			
+			
+			# print(send_money)
 
 			return redirect('cryptoclient:wallet-list')
 
@@ -379,8 +385,12 @@ class BuySellDataView(View):
 
 class BuySellOrderView(View):
 
+	form_class = DeleteOrderForm
+
 	def get(self,request):
 		GDAX = GDAXApi()
+
+		form = self.form_class()
 
 		all_open_orders = GDAX.get_all_open_orders()
 
@@ -393,11 +403,27 @@ class BuySellOrderView(View):
 		# order = GDAX.create_order()
 
 		context = {
-			
+			'form':form,
 			'open_orders':all_open_orders
 		}
 
 		return render(request, 'cryptoclient/buy-sell-order.html', context)
+
+	def post(self, request):
+		form = self.form_class(request.POST)
+
+		if form.is_valid():
+			order_id = request.POST['orderId']
+			symbol = request.POST['symbol']
+
+			GDAX = GDAXApi()
+			GDAX.cancel_order(order_id)
+
+			return redirect('cryptoclient:buy-sell-order')
+
+		else:
+			return HttpResponse('Didnt Work')
+
 
 class BuySellAccountsView(View):
 
@@ -533,19 +559,55 @@ class SwapCryptoWalletView(View):
 	def get(self, request):
 		coinigy = CoinigyAPI()
 		binance2 = Binance2Auth()
+		gdax = GDAXApi()
+
 		tickers = binance2.get_all_tickers()
 		for item in tickers:
 			# print(item)
 			symbol = item['symbol']
-			print(symbol)
+			# print(symbol)
 			
 
-		balances = coinigy.list_balances()['data']
+		balances = coinigy.list_balances()
+
+		
+
+		# print(balances)
+
+		crypto_list = binance2.every_crypto_binance()
+
+		# for item in crypto_list:
+		# 	address = binance2.get_deposit_address(item)
+		# 	print(item, type(address))
+		# 	user_address = UserAddresses()
+		# 	if address['success'] == False:
+		# 		continue
+
+		# 	else:
+				
+		# 		print(address)
+			
+
+		# 		print(item, address['address'], len(address['address']))
+		# 		user_address.crypto = item
+		# 		user_address.address = address['address']
+		# 		user_address.save()
+
+
+
+		# 	time.sleep(3)
+
+		user_addresses = UserAddresses.objects.all()
+		print(user_addresses)
+		# for item in user_addresses:
+		# 	print(item.address, item.crypto)
+
 
 		print(balances,"right here")
 
 		context = {
-			'balances': balances
+			'balances': balances,
+			'user_addresses': user_addresses
 		}
 
 		return render(request, 'cryptoclient/swap-crypto-wallet.html', context)
@@ -566,36 +628,36 @@ class SwapCryptoView(View):
 
 
 
-		coinigy = CoinigyAPI()
+		# coinigy = CoinigyAPI()
 
-		history = coinigy.list_history_data()
-		print(history)
+		# history = coinigy.list_history_data()
+		# print(history)
 
-		orders = coinigy.list_orders()
-		print(orders)
+		# orders = coinigy.list_orders()
+		# print(orders)
 
-		auth = coinigy.list_accounts()
-		# print(auth['data'][0])
-		auth_id, exch_id, = coinigy.get_auth_and_exch_id()
-		# print(auth_id,exch_id)
+		# auth = coinigy.list_accounts()
+		# # print(auth['data'][0])
+		# auth_id, exch_id, = coinigy.get_auth_and_exch_id()
+		# # print(auth_id,exch_id)
 
-		balances = coinigy.list_balances()
-		exchanges = coinigy.list_exchanges()
+		# balances = coinigy.list_balances()
+		# exchanges = coinigy.list_exchanges()
 		# markets = coinigy.list_markets()
-		order_type, price_type = coinigy.get_ordertype_pricetype_id()
+		# order_type, price_type = coinigy.get_ordertype_pricetype_id()
 
 		order_types = {'1':'Buy', '2':'Sell'}
 		price_types = {'3':'Limit', '6':'Stop Limit'}
-		print(order_type, price_type)
-		exchanges = exchanges['data']
+		# print(order_type, price_type)
+		# exchanges = exchanges['data']
 		# print(exchanges, 'exchange')
 		# print(markets, 'market')
 		
 
-		exch_code = ''
-		for exchange in exchanges:
-			if exchange['exch_name'] == 'Binance':
-				exch_code = exchange['exch_code']
+		# exch_code = ''
+		# for exchange in exchanges:
+		# 	if exchange['exch_name'] == 'Binance':
+		# 		exch_code = exchange['exch_code']
 
 
 
@@ -611,11 +673,11 @@ class SwapCryptoView(View):
 		# create_order(self, auth_id, exch_id, mkt_id, order_type_id,price_type_id,limit_price, order_quantity):
 		
 		context = {
-			'auth':auth['data'][0],
-			'balances':balances['data'],
+			# 'auth':auth['data'][0],
+			# 'balances':balances['data'],
 			'form':cryptotocryptoform,
 			'chart_form': chart_form,
-			'orders':orders['data']
+			# 'orders':orders['data']
 		}
 
 		return render(request, 'cryptoclient/swap-crypto.html', context)
@@ -633,9 +695,11 @@ class SwapCryptoView(View):
 		print(just_requested_pair)
 
 
-		coinigy = CoinigyAPI()
-		auth_id, exch_id, = coinigy.get_auth_and_exch_id()
-		order_types = coinigy.get_ordertype_pricetype_id()
+		# coinigy = CoinigyAPI()
+		binance = Binance2Auth()
+
+		# auth_id, exch_id, = coinigy.get_auth_and_exch_id()
+		# order_types = coinigy.get_ordertype_pricetype_id()
 		order_type_id = order_types['data']['order_types']
 		# price_type_id = order_types['data']['price_types']
 		# not going to allow limit trading.
@@ -643,20 +707,21 @@ class SwapCryptoView(View):
 
 		# print('XOXOXOXOXOXOXO')
 		# print(order_types['data'], 'order_type')
-		exchanges = coinigy.list_exchanges()
+		# exchanges = coinigy.list_exchanges()
 		
 		# print(exchanges, 'exchange')
 		# print(markets, 'market')
-		exchange = exchanges['data']
+		# exchange = exchanges['data']
 
-		exch_code = ''
-		for item in exchange:
-			if item['exch_name'] == 'Binance':
-				exch_code = item['exch_code']
+		# exch_code = ''
+		# for item in exchange:
+		# 	if item['exch_name'] == 'Binance':
+		# 		exch_code = item['exch_code']
 
 
 
-		pairs = coinigy.list_markets(exch_code)
+		# pairs = coinigy.list_markets(exch_code)
+		# print(pairs)
 
 		cryptotocryptoform = self.form_class(request.POST)
 		# print(request.POST, 'post req')
@@ -671,11 +736,19 @@ class SwapCryptoView(View):
 			order_quantity = request.POST['order_quantity']
 			order_type_id = request.POST['order_type']
 
-			if order_type_id == 1:
-				order_type_id == 'Buy'
+			print(order_type_id, type(order_type_id))
 
-			if order_type_id == 2:
-				order_type_id == 'Sell'
+			order_type_id1 = ''
+			
+			if order_type_id == '1':
+				order_type_id1 = 'Buy'
+
+			if order_type_id == '2':
+				order_type_id1 = 'Sell'
+
+			print(order_type_id1, type(order_type_id1))
+			
+			
 
 		
 			mkt_id = ''
@@ -688,10 +761,28 @@ class SwapCryptoView(View):
 					mkt_id = item['mkt_id']
 					# print(mkt_id,'mkt_id')
 
+			print(order_type_id1, price_type_id, type(order_type_id1), type(price_type_id),"______________________")
+
+
+			if order_type_id1 == 'Buy' and price_type_id == 'Limit':
+
+				binance.create_buylimit_order(user_pair_data, order_quantity, limit_price)
+				print('executed')
+			elif order_type_id1 == 'Sell' and price_type_id == 'Limit':
+				binance.create_selllimit_order(user_pair_data, order_quantity, limit_price)
+				print('executed')
+			elif order_type_id1 == 'Buy' and price_type_id == 'Market':
+				binance.create_buymarket_order(user_pair_data, order_quantity, limit_price)
+				print('executed')
+			elif order_type_id1 == 'Sell' and price_type_id == 'Market':
+				binance.create_sellmarket_order(user_pair_data, order_quantity, limit_price)
+				print('executed')
 			print(auth_id, exch_id, mkt_id, order_type_id, price_type_id, limit_price, order_quantity, "right before order creation")
-			order = coinigy.create_order(auth_id, exch_id, mkt_id, order_type_id, price_type_id, limit_price, order_quantity)
-			print(order)
-			print('executed')
+			# order = coinigy.create_order(int(auth_id), int(exch_id), int(mkt_id), int(order_type_id), price_type_id, float(limit_price), float(order_quantity))
+			# print(order)
+			# order = binance.create_limit_order(user_pair_data, order_quantity, limit_price)
+			
+			# print(order)
 			return redirect('cryptoclient:swap-crypto')
 		# elif ChartForm.is_valid():
 
@@ -699,7 +790,103 @@ class SwapCryptoView(View):
 		else:
 			return HttpResponse('Didnt Work')
 
-list_of_all_binance_pairs = []
+class SwapCryptoSendMoneyView(View):
+	
+	form_class = SwapCryptoSendMoneyForm
+
+	def get(self, request):
+
+		send_form = self.form_class()
+
+		context = {
+			"form":send_form
+		}
+
+		return render(request, 'cryptoclient/swap-crypto-send-money.html', context)
+
+	def post(self,request):
+
+		swapcryptoform = self.form_class(request.POST)
+
+		if swapcryptoform.is_valid():
+
+
+			address = request.POST['to_address']
+			amount = request.POST['amount']
+			currency = request.POST['currency']
+			print(address, amount, currency)
+			binance = Binance2Auth()
+
+			send_form = binance.withdraw_binance(currency, address, amount)
+			return redirect('cryptoclient:swap-crypto')
+
+		else:
+
+			return HttpResponse('Didnt Work')
+
+
+class SwapCryptoOrderView(View):
+
+	form_class = DeleteOrderForm
+
+	def get(self, request):
+
+		binance = BinanceAPI()
+		binance2 = Binance2Auth()
+
+		form = self.form_class()
+		
+
+		
+		orders2 = binance2.get_open_orders()
+		print(orders2)
+		
+
+		# orders = binance.get_current_open_orders()
+
+		# print(orders)
+
+		context = {
+			'orders':orders2,
+			'form':form
+		}
+
+		return render(request, 'cryptoclient/swap-crypto-orders.html', context)
+
+	def post(self, request):
+
+		deleteform = self.form_class(request.POST)
+		print(request.POST)
+
+		binance = BinanceAPI()
+		binance2 = Binance2Auth()
+
+
+
+		# orders = binance.get_current_open_orders()
+
+		# print(orders)
+		# return HttpResponse("YES")
+
+		if deleteform.is_valid():
+			order_id = request.POST['orderId']
+			symbol = request.POST['symbol']
+
+
+			# binance.delete_order(order_id)
+			binance2.cancel_order(order_id, symbol)
+
+			return redirect('cryptoclient:swap-crypto-order')
+
+		else:
+			return HttpResponse('Didnt Work')
+
+
+
+
+
+
+
 
 
 

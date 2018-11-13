@@ -8,7 +8,7 @@ class WalletCreationForm(forms.Form):
 # maybe
 class MoneyTransfer(forms.Form):
 	# find the max length of the address
-	address = forms.CharField(max_length=40)
+	address = forms.CharField(max_length=150)
 	# possibly a float field
 	amount = forms.CharField(max_length=20)
 	currency = forms.CharField(max_length=40)
@@ -65,7 +65,7 @@ class CryptoToCryptoForm(forms.Form):
 
 class WalletSendMoneyForm(forms.Form):
 
-	to_address = forms.CharField(max_length=30)
+	to_address = forms.CharField(max_length=150)
 	amount = forms.FloatField()
 	currency = forms.ChoiceField(choices=CRYPTO_CHOICE,
 								label="",
@@ -73,6 +73,17 @@ class WalletSendMoneyForm(forms.Form):
                                 widget=forms.Select(),
                                 required=True
                                 )
+
+class DeleteOrderForm(forms.Form):
+
+	orderId = forms.CharField(max_length=50)
+	symbol = forms.CharField(max_length=20)
+
+class SwapCryptoSendMoneyForm(forms.Form):
+
+	to_address = forms.CharField(max_length=150)
+	amount = forms.FloatField()
+	currency = forms.CharField(max_length=15)
 
 class BetweenGDAXAndCBForm(forms.Form):
 

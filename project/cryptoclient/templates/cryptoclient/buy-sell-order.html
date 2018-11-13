@@ -23,17 +23,11 @@
 
 	
 
-		<!-- {% for open_order in open_orders %}
-			<ol>
-				<h3>Currency:{{open_order.product_id}}</h3>
-				<li>Order Side: {{open_order.side}}</li>
-				<li>Order Type: {{open_order.type}}</li>
-				<li>Created At: {{open_order.created_at}}</li>
-				<li>Price: ${{open_order.price}}</li>
-				<li>Size: {{open_order.size}}</li>
-			
-			</ol>
-		{% endfor %} -->
+	<form action="{% url 'cryptoclient:swap-crypto-order' %}" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input class="btn btn-outline-primary" type="submit" value="Submit"/>
+	</form>
 
 	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">

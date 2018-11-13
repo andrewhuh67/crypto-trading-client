@@ -80,9 +80,11 @@ class Wallet():
 		tranaction = primary_account.get_transactions()[-1]
 		return transaction
 
-	def send_money(self, address, amount, currency, description):
+	def send_money(self, address, amount, currency, account_id):
+		auth = self.authenticate()
 		primary_account = self.get_primary_account()
-		primary_account.send_money(to=address.address, amount=amount, currency=currency, description=description)
+		print("        ","address", address, "amount",  amount,"currency", currency,"          ")
+		auth.send_money(account_id=account_id, to=address, amount=amount, currency=currency)
 
 
 	# def sell_coin(self, amount, currency):
