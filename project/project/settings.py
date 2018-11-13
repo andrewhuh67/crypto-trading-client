@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'bootstrap3',
     'crispy_forms',
+    'users',
+    'background_task'
 ]
 
 MIDDLEWARE = [
@@ -90,7 +92,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'crypto',
+        'NAME': 'cryptodata',
         'USER': 'root',
         'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
         'HOST': 'localhost',
@@ -131,6 +133,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_SUCCESS_PAGE = 'cryptoclient:submit-key'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -141,6 +145,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-
+AUTH_USER_MODEL = 'auth.User'
 
 

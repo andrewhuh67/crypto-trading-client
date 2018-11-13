@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from project.settings import AUTH_USER_MODEL
 
 # Create your models here.
 
@@ -27,3 +28,15 @@ class PastSwaps(models.Model):
 class UserAddresses(models.Model):
 	crypto = models.CharField(max_length=10)
 	address = models.CharField(max_length=150)
+
+class UserCredentials(models.Model):
+	cb_api_key = models.CharField(max_length=200)
+	cb_secret_key = models.CharField(max_length=200)
+	gdax_api_key = models.CharField(max_length=200)
+	gdax_secret_key = models.CharField(max_length=200)
+	gdax_passphrase = models.CharField(max_length=200)
+	coinigy_api_key = models.CharField(max_length=200)
+	coinigy_api_secret = models.CharField(max_length=200)
+	binance_api_key = models.CharField(max_length=200)
+	binance_api_secret = models.CharField(max_length=200)
+	user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT)

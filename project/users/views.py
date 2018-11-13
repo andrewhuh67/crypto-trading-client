@@ -35,7 +35,7 @@ class CreateUserView(View):
 			#User.objects.create(**form.cleaned_data)
 			user = form.save()
 			login(request, user)
-			return redirect(settings.LOGIN_SUCCESS_PAGE)
+			return redirect('users:login')
 		else:
 			context = {
 				'user_creation_form': form

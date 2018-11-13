@@ -22,6 +22,7 @@ app_name = "cryptoclient"
 urlpatterns = [
     url(r'^api-auth/', include(('rest_framework.urls','rest_framework'), namespace='rest_framework')),
 	# url(r'^authenticate/', include(('user.urls','user'), namespace='user')),
-	url(r'^api/v0/', include(('cryptoclient.urls','cryptoclient'), namespace='cryptoclient')),    
+	url(r'^api/v0/', include(('cryptoclient.urls','cryptoclient'), namespace='cryptoclient')),
+    url(r'^user/', include(('users.urls','users'), namespace='users')),     
 ]
 

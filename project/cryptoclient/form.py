@@ -105,6 +105,18 @@ class BetweenGDAXAndCBForm(forms.Form):
 class ChartForm(forms.Form):
 
 	pair = forms.CharField(max_length=20)
+
+class SubmitKeysForm(forms.Form):
+	cb_api_key = forms.CharField(max_length=200)
+	cb_secret_key = forms.CharField(max_length=200)
+	gdax_api_key = forms.CharField(max_length=200)
+	gdax_secret_key = forms.CharField(max_length=200)
+	gdax_passphrase = forms.CharField(max_length=200)
+	coinigy_api_key = forms.CharField(max_length=200)
+	coinigy_api_secret = forms.CharField(max_length=200)
+	binance_api_key = forms.CharField(max_length=200)
+	binance_api_secret = forms.CharField(max_length=200)
+
 								
 
 

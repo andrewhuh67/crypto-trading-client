@@ -7,6 +7,7 @@ app_name = "cryptoclient"
 urlpatterns = [
 
     url(r'^crypto/options/$', views.OptionListView.as_view(), name="options-list"),
+    url(r'^crypto/submitkey/$', views.SubmitKeyView.as_view(), name="submit-key"),
     url(r'^crypto/wallet/$', views.WalletListView.as_view(), name="wallet-list"),
     url(r'^crypto/wallet/create/$', views.WalletCreateView.as_view(), name="wallet-create"),
     url(r'^crypto/wallet/send-money/$', views.WalletTransactionView.as_view(), name="send-money"),

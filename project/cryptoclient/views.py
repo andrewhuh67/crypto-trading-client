@@ -1,4 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 import json
 from django.views.generic import View
@@ -15,9 +18,9 @@ from cryptoclient.wrapper_gdax import GDAXApi
 from cryptoclient.wrapper_coinigy import CoinigyAPI
 from cryptoclient.wrapper_binance import BinanceAPI
 from cryptoclient.wrapper_binance2 import Binance2Auth
-from cryptoclient.models import UserAddresses
+from cryptoclient.models import UserAddresses, UserCredentials
 
-from cryptoclient.form import WalletCreationForm, LimitOrderForm, CryptoToCryptoForm, WalletSendMoneyForm, BetweenGDAXAndCBForm, ChartForm, SwapCryptoSendMoneyForm, DeleteOrderForm
+from cryptoclient.form import WalletCreationForm, LimitOrderForm, CryptoToCryptoForm, WalletSendMoneyForm, BetweenGDAXAndCBForm, ChartForm, SwapCryptoSendMoneyForm, DeleteOrderForm, SubmitKeysForm
 
 # Create your views here.
 
@@ -32,6 +35,83 @@ class OptionListView(View):
 			'ethereum_data':ethereum_data
 		}
 		return render(request, 'cryptoclient/option.html', context)
+
+class SubmitKeyView(View):
+
+	form_class = SubmitKeysForm
+
+	def get(self, request):
+
+		form = self.form_class()
+
+
+		print(request.user.id, "user_id")
+
+		context = {
+			'form':form
+		}
+
+		return render(request, 'cryptoclient/submit-keys.html', context)
+
+	def post(self, request):
+
+		print("this is before the request")
+
+		user = User.objects.get(id=request.user.id)
+
+		# current_user = get_user_model()
+		# print(current_user)
+		
+		form = self.form_class(request.POST)
+
+		# user = get_object_or_404(User, pk=request.user.id)
+		print(user)
+		# form1 = self.form_class()
+		# print(request.POST, "request")
+
+		# print("right before form")
+		
+
+		
+		if form.is_valid():
+
+			cb_api_key = request.POST['cb_api_key']
+			cb_secret_key = request.POST['cb_secret_key'] 
+			gdax_api_key = request.POST['gdax_api_key']
+			gdax_secret_key = request.POST['gdax_secret_key']
+			gdax_passphrase = request.POST['gdax_passphrase']
+			coinigy_api_key = request.POST['coinigy_api_key']
+			coinigy_api_secret = request.POST['coinigy_api_secret']
+			binance_api_key = request.POST['binance_api_key']
+			binance_api_secret = request.POST['binance_api_secret']
+
+			user_cred = UserCredentials()
+
+			user_cred.cb_api_key = request.POST['cb_api_key']
+			user_cred.cb_secret_key = request.POST['cb_secret_key']
+			user_cred.gdax_api_key = request.POST['gdax_api_key']
+			user_cred.gdax_secret_key = request.POST['gdax_secret_key']
+			user_cred.gdax_passphrase = request.POST['gdax_passphrase']
+			user_cred.coinigy_api_key = request.POST['coinigy_api_key']
+			user_cred.coinigy_api_secret = request.POST['coinigy_api_secret']
+			user_cred.binance_api_key = request.POST['binance_api_key']
+			user_cred.binance_api_secret = request.POST['binance_api_secret']
+			user_cred.user = user
+			user_cred.save()
+			print("WEWEWEWEWEWEWE")
+
+			return redirect('cryptoclient:options-list')
+		
+		else:
+			
+			context = {
+				'form':form1
+			}
+
+			return render(request, 'cryptoclient/submit-keys.html', context)
+
+
+
 
 class WalletListView(View):
 
@@ -578,7 +658,7 @@ class SwapCryptoWalletView(View):
 
 		# for item in crypto_list:
 		# 	address = binance2.get_deposit_address(item)
-		# 	print(item, type(address))
+		# 	print(item, type(address), address)
 		# 	user_address = UserAddresses()
 		# 	if address['success'] == False:
 		# 		continue
@@ -695,11 +775,11 @@ class SwapCryptoView(View):
 		print(just_requested_pair)
 
 
-		# coinigy = CoinigyAPI()
+		coinigy = CoinigyAPI()
 		binance = Binance2Auth()
 
 		# auth_id, exch_id, = coinigy.get_auth_and_exch_id()
-		# order_types = coinigy.get_ordertype_pricetype_id()
+		order_types = coinigy.get_ordertype_pricetype_id()
 		order_type_id = order_types['data']['order_types']
 		# price_type_id = order_types['data']['price_types']
 		# not going to allow limit trading.
@@ -751,15 +831,16 @@ class SwapCryptoView(View):
 			
 
 		
-			mkt_id = ''
-			# print(pairs['data'], 'print')
+			# mkt_id = ''
+			# # print(pairs['data'], 'print')
+			# print(pairs)
 			
-			for item in pairs['data']:
-				# print(item)
+			# for item in pairs['data']:
+			# 	# print(item)
 
-				if user_pair_data == str(item['mkt_name']):
-					mkt_id = item['mkt_id']
-					# print(mkt_id,'mkt_id')
+			# 	if user_pair_data == str(item['mkt_name']):
+			# 		mkt_id = item['mkt_id']
+			# 		# print(mkt_id,'mkt_id')
 
 			print(order_type_id1, price_type_id, type(order_type_id1), type(price_type_id),"______________________")
 
@@ -777,7 +858,7 @@ class SwapCryptoView(View):
 			elif order_type_id1 == 'Sell' and price_type_id == 'Market':
 				binance.create_sellmarket_order(user_pair_data, order_quantity, limit_price)
 				print('executed')
-			print(auth_id, exch_id, mkt_id, order_type_id, price_type_id, limit_price, order_quantity, "right before order creation")
+			# print(auth_id, exch_id, mkt_id, order_type_id, price_type_id, limit_price, order_quantity, "right before order creation")
 			# order = coinigy.create_order(int(auth_id), int(exch_id), int(mkt_id), int(order_type_id), price_type_id, float(limit_price), float(order_quantity))
 			# print(order)
 			# order = binance.create_limit_order(user_pair_data, order_quantity, limit_price)

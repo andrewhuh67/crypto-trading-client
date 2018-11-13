@@ -41,7 +41,7 @@
 
 	<form action="{% url 'cryptoclient:swap-crypto' %}" method="POST">
 	    {% csrf_token %}
-	    {{form }}
+	    {{ form.as_ul }}
 	    <input class="btn btn-outline-primary" type="submit" value="Submit"/>
 	</form>
 
