@@ -12,6 +12,8 @@ API_SECRET = credentials.api_secret()
 
 API_PASS = credentials.api_passphrase()
 
+print(API_KEY, API_SECRET, API_PASS)
+
 
 # Create custom authentication for Exchange
 class CoinbaseExchangeAuth(AuthBase):
@@ -61,7 +63,7 @@ class GDAXApi():
 
 	def auth(self):
 		auth = CoinbaseExchangeAuth(API_KEY, API_SECRET, API_PASS)
-
+		print(API_KEY, API_SECRET, API_PASS)
 		return auth
 
 	def get_accounts(self):
@@ -73,10 +75,13 @@ class GDAXApi():
 
 	def create_market_order(self, order_side, order_type, product_id, size):
 		auth = self.auth()
-		
+
+		tickers = self.product_ticker(product_id)
+
+		price = tickers["price"]
 		order = {
 			'type':order_type,
-			'size': float(size),
+			'size': size,
 			'side': order_side,
 			'product_id': product_id,
 
@@ -88,7 +93,8 @@ class GDAXApi():
 
 		# print(r.json())
 
-		return r.json()
+		return price
+		
 
 	def create_limit_order(self, order_side, price, product_id, size, order_type):
 		auth = self.auth()
@@ -139,9 +145,15 @@ class GDAXApi():
 	def market_data(self):
 		auth = self.auth()
 
+		print(auth)
+
+		print('inside market data')
+
 		bitcoin_data = requests.get(api_url + 'products/' + 'BTC-USD' + '/ticker', auth=auth)
 		ethereum_data = requests.get(api_url + 'products/' + 'ETH-USD' + '/ticker', auth=auth)
 		# print(bitcoin_data.json(), ethereum_data.json(), "1")
+		print('after requests')
+
 		return bitcoin_data.json(), ethereum_data.json()
 
 	# def transfer_coinbase_gdax(self, amount, currency, coinbase_account_id):
@@ -274,8 +286,33 @@ class GDAXApi():
 
 		r = requests.delete(api_url + 'orders/' + order_id, auth=auth)
 
-		
+	def get_24_hour_data(self, product_id):
+		auth = self.auth()
 
+		r = requests.get(api_url + 'products/' + product_id + '/stats', auth=auth)
+
+		return r.json()
+
+	def list_fills(self, product_id):
+		auth = self.auth()
+
+
+
+		values = {
+			'product_id': product_id
+		}
+
+		r = requests.get(api_url +  '/fills', json=values, auth=auth)
+
+		return r.json()
+
+	def product_ticker(self, product_id):
+
+		auth = self.auth()
+
+		r = requests.get(api_url +  '/products/' + product_id + '/ticker', auth=auth)
+		
+		return r.json()
 
 
 

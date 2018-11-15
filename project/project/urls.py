@@ -16,8 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
 from django.conf.urls import url, include
+from background_task import tasks
 
 app_name = "cryptoclient"
+
+tasks.autodiscover()
 
 urlpatterns = [
     url(r'^api-auth/', include(('rest_framework.urls','rest_framework'), namespace='rest_framework')),

@@ -56,7 +56,24 @@
           
           <form action="{% url 'cryptoclient:submit-key' %}" method="POST">
             {% csrf_token %}
-            {{ form.as_ul }}
+            <p>CB Api Key:</p>
+            {{ form.cb_api_key }}
+            <p>CB Secret Key:</p>
+            {{ form.cb_secret_key }}
+            <p>Gdax Api Key:</p>
+            {{ form.gdax_api_key }}
+            <p>Gdax Secret Key:</p>
+            {{ form.gdax_secret_key }}
+            <p>Gdax Passphrase Key:</p>
+            {{ form.gdax_passphrase }}
+            <p>Coinigy Api Key:</p>
+            {{ form.coinigy_api_key }}
+            <p>Coinigy Secret Key:</p>
+            {{ form.coinigy_api_secret }}
+            <p>Binance Api Key:</p>
+            {{ form.binance_api_key }}
+            <p>Binance Secret Key:</p>
+            {{ form.binance_api_secret }}
             <input class="btn btn-outline-primary" type="submit" value="Submit"/>
           </form>
           

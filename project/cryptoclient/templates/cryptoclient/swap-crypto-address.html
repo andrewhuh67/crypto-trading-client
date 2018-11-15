@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-	<p>List Wallet Addresses</p>
+	<p>List Wallets</p>
 {% endblock title %}
 
 {% block header %}
@@ -16,9 +16,16 @@
 {% endblock header %}
 	
 {% block main %}
+
+
+	<!-- <h3><a href="{% url 'cryptoclient:swap-crypto-send-money' %}">Send Crypto</a></h3>
+	<h3><a href="{% url 'cryptoclient:swap-crypto-order' %}">Orders</a></h3> -->
 	<!-- <h3><a href="{% url 'cryptoclient:wallet-create' %}">Create Wallet</a></h3> -->
-	<h3><a href="{% url 'cryptoclient:send-money' %}">Send Money</a></h3>
-	<!-- <h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3> -->
+	<!-- <h3><a href="{% url 'cryptoclient:wallet-address' %}">Wallet Addresses</a></h3>
+	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
+	<h3><a href="{% url 'cryptoclient:coinbase-gdax-transfer' %}">Coinbase-GDAX Transfer</a></h3> -->
+	<h3>Wallet List</h3>
+
 
 
 	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
@@ -38,33 +45,41 @@
 
           <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
 
-          <h1>Coinbase Wallets</h1>
+          
           <div class="table-responsive">
             <table class="table table-striped table-sm">
               <thead>
                 <tr>
                 	
-					<th>Currency:</th>
-                  <th>Address:</th>
-                  
+					           <th>Symbol:</th>
+                  	<th>Current Amount:</th>
+                    <th>Total Amount:</th>
+                  	
                   
                   
                   
                 </tr>
               </thead>
               <tbody>
-              {% for wallet in addresses %}
+              {% for crypto in final_list %}
 	                <tr>
 	                	
-		                  <td>{{wallet.key}}</td>
-		                  <td>{{wallet.address}}</td>
+		                  <td>{{crypto.balance_curr_code}}</td>
+		                  <td>{{crypto.balance_amount_avail}}</td>
+                      <td>{{crypto.balance_amount_total}}</td>
+		                  <!-- <td>{{address.current_holding}}</td>
+		                  <td>{{address.total_holding}}</td> -->
 		                  
-		             
 		                  
 	                  	
 	                </tr>
                 {% endfor %}
+                
+               
+
+				
               </tbody>
+
             </table>
           </div>
         </main>
@@ -81,6 +96,8 @@
 
     <!-- Icons -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    
+
 
 	
 

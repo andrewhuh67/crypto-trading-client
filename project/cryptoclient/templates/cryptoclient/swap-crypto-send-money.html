@@ -16,13 +16,18 @@
 	
 {% block main %}
 	<!-- <h3><a href="{% url 'cryptoclient:wallet-address' %}">Wallet Address</a></h3> -->
-	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
+	<!-- <h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3> -->
 	<h3>Send Crypto to an Exchange or Wallet</h3>
 	
-	<form action="{% url 'cryptoclient:swap-crypto-send-money' %}" method="POST">
+	<form action="{% url 'cryptoclient:swap-crypto-send-money' %}" method="POST" style="width:30%">
 	    {% csrf_token %}
-	    {{ form }}
-	    <input type="submit" value="Submit" />
+	    <p>Amount:</p>
+	    {{ form.amount }}
+	    <p>Currency:</p>
+	    {{ form.currency }}
+	    <p>Address:</p>
+	    {{ form.to_address }}
+	    <input class="btn btn-outline-primary" type="submit" value="Submit"/>
 	</form>
 
 	

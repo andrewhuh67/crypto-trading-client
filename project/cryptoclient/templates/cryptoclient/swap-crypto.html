@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'cryptoclient/css/style.css' %}"></script>
     
 	
 	
@@ -19,7 +20,7 @@
 {% block main %}
 	<!-- <h1>Swap Crypto</h1> -->
 	<h3><a href="{% url 'cryptoclient:swap-crypto-wallet' %}">List of Wallets</a></h3>
-	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
+	<h3><a href="{% url 'cryptoclient:swap-crypto-prices' %}">Pair Prices</a></h3>
 	
 	<!-- <h1>{{auth.auth_nickname}}</h1> -->
 	<h1>{{auth.exch_name}}</h1>
@@ -38,12 +39,37 @@
 		{{ chart_form }}
 		<input class="btn btn-outline-primary" type="submit" value="Submit"/>
 	</form> -->
+	<h1>Binance</h1>
+	<div style="width:30%">
+		<form class="limit" action="{% url 'cryptoclient:swap-crypto' %}" method="POST">
+		    {% csrf_token %}
+		    <p>Pair:</p>
+		    {{ form.pair }}
+		    <p>Order Type:</p>
+		    {{ form.order_type }}
+		    <p>Market or Limit:</p>
+		    {{ form.price_type }}
+		    <p>Price:</p>
+		    {{ form.price }}
+		    <p>Order Quantity</p>
+		    {{ form.order_quantity }}
 
-	<form action="{% url 'cryptoclient:swap-crypto' %}" method="POST">
+		    <input class="btn btn-outline-primary" type="submit" value="Submit"/>
+		</form>
+	</div>
+	<!-- <form class="market" action="{% url 'cryptoclient:swap-crypto' %}" method="POST">
 	    {% csrf_token %}
-	    {{ form.as_ul }}
+	    <p>Pair:</p>
+	    {{ market_form.crypto_pair }}
+	    <p>Order Type:</p>
+	    {{ market_form.order_side }}
+	    <p>Market or Limit:</p>
+	    {{ market_form.order_type }}
+	    <p>Order Quantity</p>
+	    {{ market_form.amount }}
+
 	    <input class="btn btn-outline-primary" type="submit" value="Submit"/>
-	</form>
+	</form> -->
 
 	
 	
@@ -53,3 +79,8 @@
 
 
 {% endblock main %}
+
+{% block footer %}
+		<!-- <script type="text/javascript" src="{% static 'cryptoclient/js/toggle.js' %}"></script>  -->
+		
+{% endblock footer %}

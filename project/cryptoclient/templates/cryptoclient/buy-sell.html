@@ -19,7 +19,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     
 	<!-- <link rel="stylesheet" type="text/css" href="{% static 'cryptoclient/css/style.css' %}" /> -->
-	<!-- <script type="text/javascript" src="{% static 'cryptoclient/js/app.js' %}"></script> -->
+	<script type="text/javascript" src="{% static 'cryptoclient/js/app.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cryptoclient/css/style.css' %}"></script>
+
+
+	
 
 	
 	
@@ -27,30 +31,39 @@
 	
 {% block main %}
 	<div>
-		<h1>Buy/Sell</h1>
-		<h3><a href="{% url 'cryptoclient:buy-sell-order' %}" class="btn btn-outline-primary">Orders</a></h3>
-		<h3><a href="{% url 'cryptoclient:buy-sell-accounts' %}" class="btn btn-outline-primary">Accounts</a></h3>
+		<h1>GDAX</h1>
+		<div>
+			<h3><a href="{% url 'cryptoclient:buy-sell-order' %}" class="btn btn-outline-primary">Orders</a></h3>
+		</div>
+		<div>
+			<h3><a href="{% url 'cryptoclient:buy-sell-accounts' %}" class="btn btn-outline-primary">Accounts</a></h3>
+		</div>
 	</div>
-
-	<div id="chart">
-			
-	</div>
-
 	<div>
-		
+		<div style="width:85%" id="chart">
+				
+		</div>
 
-		
-			
+	
+	
 
-			<form action="{% url 'cryptoclient:buy-sell' %}" method="POST">
+		<div style="width:30%">
+			<form class=form action="{% url 'cryptoclient:buy-sell' %}" method="POST">
 				{% csrf_token %}
-				<!-- {% crispy form %} -->
-				{{ form }}
+				
+				<p>Order Type:</p>{{ form.order_type }}
+				<p>Buy Or Sell:</p>{{ form.order_side }}
+				<p>Crypto Pair:</p>{{ form.crypto_pair }}
+				<p>Price:</p>{{ form.price }}
+				<p>Amount:</p>{{ form.amount }}
 				<input class="btn btn-outline-primary" type="submit" value="Submit"/>
 			</form>
+		</div>
+	</div>		
+
 			
 	
-	</div>
+	
 
 	
 	
@@ -67,6 +80,6 @@
 
 {% endblock main %}
 
-{% block footer %} 
-		<script type="text/javascript" src="{% static 'cryptoclient/js/app.js' %}"></script>
+{% block footer %}
+	
 {% endblock footer %}

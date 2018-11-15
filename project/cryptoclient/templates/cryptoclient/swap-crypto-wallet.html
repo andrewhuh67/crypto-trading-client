@@ -20,11 +20,12 @@
 
 	<h3><a href="{% url 'cryptoclient:swap-crypto-send-money' %}">Send Crypto</a></h3>
 	<h3><a href="{% url 'cryptoclient:swap-crypto-order' %}">Orders</a></h3>
+  <h3><a href="{% url 'cryptoclient:swap-crypto-address' %}">Wallet List</a></h3>
 	<!-- <h3><a href="{% url 'cryptoclient:wallet-create' %}">Create Wallet</a></h3> -->
 	<!-- <h3><a href="{% url 'cryptoclient:wallet-address' %}">Wallet Addresses</a></h3>
 	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
 	<h3><a href="{% url 'cryptoclient:coinbase-gdax-transfer' %}">Coinbase-GDAX Transfer</a></h3> -->
-	<h3>Wallet List</h3>
+	<h3>Address List</h3>
 
 
 
@@ -51,8 +52,9 @@
               <thead>
                 <tr>
                 	
-					<th>Symbol:</th>
-                  <th>Address</th>
+					           <th>Symbol:</th>
+                  	<th>Address:</th>
+                  	
                   
                   
                   
@@ -63,13 +65,20 @@
 	                <tr>
 	                	
 		                  <td>{{address.crypto}}</td>
-		                  <td>{{address.address}}</td>
+		                  <td>{{address.address.address}}</td>
+		                  <!-- <td>{{address.current_holding}}</td>
+		                  <td>{{address.total_holding}}</td> -->
 		                  
 		                  
 	                  	
 	                </tr>
                 {% endfor %}
+                
+               
+
+				
               </tbody>
+
             </table>
           </div>
         </main>

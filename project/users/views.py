@@ -5,13 +5,13 @@ from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 
-User = get_user_model()
+# User = get_user_model()
 
 # Create your views here.
 def logout_view(request):
     logout(request)
 
-    return redirect("users:index")
+    return redirect("users:login")
 
 class IndexView(View):
 	

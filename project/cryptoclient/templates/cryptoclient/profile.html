@@ -75,9 +75,14 @@
               <thead>
                 <tr>
                 	
-                	<th>Transaction Date:</th>
-					<th>Currency:</th>
-					<th>Transaction Amount:</th>
+                	<th>Timestamp:</th>
+					<th>Crypto Pair:</th>
+					<th>Amount:</th>
+					<th>Price:</th>
+					<th>Buy or Sell:</th>
+					<th>Order Type:</th>
+					<th>Exchange:</th>
+					
                   	
                 	
 					
@@ -88,18 +93,24 @@
                 </tr>
               </thead>
               <tbody>
-              {% for transaction in past_buysell_transactions %}
+              {% for order in past_orders %}
 	                <tr>
-	                	<td>{{transaction.created_at}}</td>
-		                
-		                  
-		                <td>{{transaction.amount}}</td>
-		                <td>{{transaction.native_amount.amount}}</td>
+	                	<td>{{order.timestamp}}</td>
+		                <td>{{order.crypto_pair}}</td>
+		                <td>{{order.amount}}</td>
+		                <td>{{order.price}}</td>
+		                <td>{{order.buy_or_sell}}</td>
+		                <td>{{order.order_type}}</td>
+		                <td>{{order.exchange}}</td>
 		                  <!-- <td>{{transaction.native_amount.currency}}</td> -->
 		                  
 	                  	
 	                </tr>
                 {% endfor %}
+
+
+
+
               </tbody>
             </table>
           </div>

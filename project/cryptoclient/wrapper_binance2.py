@@ -47,9 +47,17 @@ class Binance2Auth():
 		             'NAV', 'TRIG', 'APPC', 'PIVX']
 		return cryptos
 
-	def create_buymarket_order(self, symbol, quantity, price):
+	def create_buymarket_order(self, symbol, quantity):
 
 		auth = self.auth()
+
+		tickers = auth.get_all_tickers()
+		price = ''
+		for ticker in tickers:
+			if symbol == ticker['symbol']:
+				price = ticker['price']
+
+
 
 		# order = auth.order_limit_buy(
 	 #    	symbol='BNBBTC',
@@ -71,6 +79,8 @@ class Binance2Auth():
 		#     symbol=symbol,
 		#     quantity=quantity,
 		#     price=price)
+
+		return price
 
 	def create_buylimit_order(self, symbol, quantity, price):
 
@@ -99,9 +109,15 @@ class Binance2Auth():
 		#     quantity=quantity,
 		#     price=price)
 
-	def create_sellmarket_order(self, symbol, quantity, price):
+	def create_sellmarket_order(self, symbol, quantity):
 
 		auth = self.auth()
+
+		tickers = auth.get_all_tickers()
+		price = ''
+		for ticker in tickers:
+			if symbol == ticker['symbol']:
+				price = ticker['price']
 
 		# order = auth.order_limit_buy(
 	 #    	symbol='BNBBTC',
@@ -124,6 +140,7 @@ class Binance2Auth():
 		#     symbol=symbol,
 		#     quantity=quantity,
 		#     price=price)
+		return price
 
 	def create_selllimit_order(self, symbol, quantity, price):
 
@@ -183,6 +200,8 @@ class Binance2Auth():
 		result = auth.cancel_order(
 	    symbol=symbol,
 	    orderId=orderId)
+
+	
 
 
 

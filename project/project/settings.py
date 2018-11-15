@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cryptodata',
+        'NAME': 'cryptofinal3',
         'USER': 'root',
         'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
         'HOST': 'localhost',

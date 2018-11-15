@@ -1,16 +1,35 @@
 {% extends 'users/_base.html' %}
+{% load static %}
 
 {% block title %}Create user {% endblock title %}
 
-{% block header %} {% endblock header %}
+{% block header %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+{% endblock header %}
 
 {% block main %}
-<div>
-    <form action="{% url 'users:create' %}" method="POST">
-         {{user_creation_form}}  
-         {% csrf_token %}
-        <input type="submit" value="Submit"/>
-    </form>
+
+
+<div class='container'>
+	<div class='col-md-6'>
+	<div class='panel panel-default'>
+		<div class='panel-heading'>Create User</div>   
+		<div class='panel-body'>
+		    <form action="{% url 'users:create' %}" method="POST">
+		         {{user_creation_form.as_p}}  
+		         {% csrf_token %}
+		        <input type="submit" value="Submit"/>
+		    </form>
+
+	    </div>
+	</div>
+    </div>
 </div>
 {% endblock main %}
 

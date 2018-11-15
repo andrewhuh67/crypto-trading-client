@@ -15,13 +15,17 @@ urlpatterns = [
     url(r'^crypto/wallet/coinbase-gdax-transfer/$', views.WalletCoinbaseGDAXTransferView.as_view(), name="coinbase-gdax-transfer"),
     url(r'^crypto/buy-sell/$', views.BuySellView.as_view(), name="buy-sell"),
     url(r'^crypto/buy-sell/data$', views.BuySellDataView.as_view(), name="buy-sell-data"),
+    url(r'^crypto/buy-sell/Ltcdata$', views.BuySellLTCDataView.as_view(), name="buy-sell-ltcdata"),
+    url(r'^crypto/buy-sell/data$', views.BuySellDataView.as_view(), name="buy-sell-data"),
     url(r'^crypto/buy-sell/orders/$', views.BuySellOrderView.as_view(), name="buy-sell-order"),
     url(r'^crypto/buy-sell/accounts/$', views.BuySellAccountsView.as_view(), name="buy-sell-accounts"),
     url(r'^crypto/profile/$', views.ProfileView.as_view(), name="profile"),
     url(r'^crypto/swap-crypto/$', views.SwapCryptoView.as_view(), name="swap-crypto"),
     url(r'^crypto/swap-crypto/wallet/$', views.SwapCryptoWalletView.as_view(), name="swap-crypto-wallet"),
     url(r'^crypto/swap-crypto/send-money/$', views.SwapCryptoSendMoneyView.as_view(), name="swap-crypto-send-money"),
-    url(r'^crypto/swap-crypto/order/$', views.SwapCryptoOrderView.as_view(), name="swap-crypto-order")
+    url(r'^crypto/swap-crypto/order/$', views.SwapCryptoOrderView.as_view(), name="swap-crypto-order"),
+    url(r'^crypto/swap-crypto/address/$', views.SwapCryptoAddressView.as_view(), name="swap-crypto-address"),
+     url(r'^crypto/swap-crypto/prices/$', views.SwapCryptoPricesView.as_view(), name="swap-crypto-prices")
 
 ]
 

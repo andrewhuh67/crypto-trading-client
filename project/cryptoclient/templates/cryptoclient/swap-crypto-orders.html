@@ -17,10 +17,19 @@
 	
 {% block main %}
 	<!-- <h1>Buy/Sell Orders</h1> -->
-
-	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
-	<h3><a href="{% url 'cryptoclient:buy-sell' %}">Buy/Sell</a></h3>
-
+  <!-- <div>
+  	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
+  	<h3><a href="{% url 'cryptoclient:buy-sell' %}">Buy/Sell</a></h3>
+  </div> -->
+  <div></div>
+  <!-- <div>
+    <h3>Delete Order</h3>
+          <form action="{% url 'cryptoclient:swap-crypto-order' %}" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input class="btn btn-outline-primary" type="submit" value="Submit"/>
+          </form>
+  </div> -->
 	
 
 		<!-- {% for open_order in open_orders %}

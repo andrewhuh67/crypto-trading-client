@@ -15,15 +15,22 @@
 {% endblock header %}
 	
 {% block main %}
-	<h3><a href="{% url 'cryptoclient:wallet-list' %}">Wallet List</a></h3>
-	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
+	<!-- <h3><a href="{% url 'cryptoclient:wallet-list' %}">Wallet List</a></h3> -->
+	<!-- <h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3> -->
 	<h3>Transfer between Coinbase and GDAX</h3>
 	
-	<form action="{% url 'cryptoclient:coinbase-gdax-transfer' %}" method="POST">
-	    {% csrf_token %}
-	    {{ form }}
-	    <input type="submit" value="Submit" />
-	</form>
+	<div style="width:30%">
+		<form action="{% url 'cryptoclient:coinbase-gdax-transfer' %}" method="POST">
+		    {% csrf_token %}
+		    <p>Amount:</p>
+		    {{ form.amount }}
+		    <p>Currency:</p>
+		    {{ form.currency }}
+		    <p>Deposit = Gdax / Withdraw = CB</p>
+		    {{ form.transaction }}
+		    <input class="btn btn-outline-primary" type="submit" value="Submit"/>
+		</form>
+	</div>
 
 	
 

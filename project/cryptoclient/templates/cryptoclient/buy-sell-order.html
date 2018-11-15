@@ -18,12 +18,12 @@
 {% block main %}
 	<!-- <h1>Buy/Sell Orders</h1> -->
 
-	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
-	<h3><a href="{% url 'cryptoclient:buy-sell' %}">Buy/Sell</a></h3>
+<!-- 	<h3><a href="{% url 'cryptoclient:options-list' %}">Options</a></h3>
+	<h3><a href="{% url 'cryptoclient:buy-sell' %}">Buy/Sell</a></h3> -->
 
 	
-
-	<form action="{% url 'cryptoclient:swap-crypto-order' %}" method="POST">
+	<h3>Delete Order:</h3>
+	<form action="{% url 'cryptoclient:buy-sell-order' %}" method="POST">
             {% csrf_token %}
             {{ form }}
             <input class="btn btn-outline-primary" type="submit" value="Submit"/>
@@ -46,18 +46,19 @@
 
           <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
 
-          <h1>Buy/Sell Orders</h1>
+          <h1>GDAX Orders</h1>
           <div class="table-responsive">
             <table class="table table-striped table-sm">
               <thead>
                 <tr>
                 	
-					<th>Currency:</th>
+					         <th>Currency:</th>
                   <th>Order Side:</th>
                   <th>Order Type:</th>
                   <th>Created At:</th>
                   <th>Price:</th>
                   <th>Size:</th>
+                  <th>Order Id:</th>
                   
                   
                   
@@ -73,6 +74,7 @@
 		                  <td>{{open_order.created_at}}</td>
 		                  <td>${{open_order.price}}</td>
 		                  <td>{{open_order.size}}</td>
+                      <td>{{open_order.id}}</td> 
 		             
 		                  
 	                  	

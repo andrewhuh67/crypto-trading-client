@@ -28,6 +28,7 @@ class PastSwaps(models.Model):
 class UserAddresses(models.Model):
 	crypto = models.CharField(max_length=10)
 	address = models.CharField(max_length=150)
+	user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT)
 
 class UserCredentials(models.Model):
 	cb_api_key = models.CharField(max_length=200)
@@ -40,3 +41,34 @@ class UserCredentials(models.Model):
 	binance_api_key = models.CharField(max_length=200)
 	binance_api_secret = models.CharField(max_length=200)
 	user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT)
+
+class UserBinanceOrders(models.Model):
+	crypto_pair = models.CharField(max_length=10)
+	order_type = models.CharField(max_length=10)
+	buy_or_sell = models.CharField(max_length=5)
+	price = models.FloatField()
+	amount = models.FloatField()
+	timestamp = models.DateTimeField(default=timezone.now)
+	exchange = models.CharField(max_length=10, default='Binance')
+	user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT)
+
+
+class UserGdaxOrders(models.Model):
+	crypto_pair = models.CharField(max_length=10)
+	order_type = models.CharField(max_length=10)
+	buy_or_sell = models.CharField(max_length=5)
+	price = models.FloatField()
+	amount = models.FloatField()
+	timestamp = models.DateTimeField(default=timezone.now)
+	exchange = models.CharField(max_length=10, default='GDAX')
+	user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT)
+
+
+
+
+
+
+
+
+
+

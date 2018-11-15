@@ -1,21 +1,41 @@
 {% extends 'users/_base.html' %}
+{% load static %}
 
 {% block title %}Login Page {% endblock title %}
 
 {% block header %} 
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-	<a href="{% url 'users:create' %}"> Register </a>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript" src="{% static 'users/css/style.css' %}"></script> 
+
+	
+	
 {% endblock header %}
 
 {% block main %}
-<div>
-    <form action="{% url 'users:login' %}" method="POST">
-         {{user_login_form}}  
-         {% csrf_token %}
-        <input type="submit" value="Login"/>
-    </form>
+<a class="link_button2" href="{% url 'users:create' %}"> Register </a>
+
+
+<div class='container'>
+	<div class='col-md-6'>
+	<div class='panel panel-default'>
+		<div class='panel-heading'>Login</div>   
+		<div class='panel-body'>
+		    <form action="{% url 'users:login' %}" method="POST">
+		         {{user_login_form.as_p}}  
+		         {% csrf_token %}
+		        <input type="submit" value="Login"/>
+		    </form>
+
+	    </div>
+	</div>
+    </div>
 </div>
 
 

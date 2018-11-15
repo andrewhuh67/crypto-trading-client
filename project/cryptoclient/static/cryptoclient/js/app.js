@@ -1,16 +1,15 @@
 $( document ).ready(function(){
-	$.ajax({
+	
+  		$.ajax({
 			type: "GET",
 			url: "data",
 			dataType: "json",
 			success: function(data) {
-				// console.log(data)
+				console.log(data)
+				console.log('BTC')
 				var chart = c3.generate({
 					bindto: '#chart',
-					size: {
-						height:60,
-						width:120
-					}
+					
 					data: {
 						columns: [
 							data['BTC'],
@@ -19,26 +18,47 @@ $( document ).ready(function(){
 				});
 			}
 		});
-})
+
+	$("#button_1").click(function(e) {
+		e.preventDefault();
+		$.ajax({
+		   	type: "GET",
+		    url: "Ltcdata",
+		    dataType: "json",
+		    success: function(data){
+		    	console.log(data)
+		    	console.log('LTC')
+		    	var chart = c3.generate({
+		    		bindto: '#chart',
+		    		data: {
+		    			columns: [
+		    				data['LTC'],
+		    			]
+		    		}
+		    	})
+		    }
+		    
+
+		    // data: {
+		    //    id: $("#button_1").val(),
+		    //    access_token: $("#access_token").val()
+		    // },
+		    // success: function(result) {
+		    //   alert('ok');
+		    // },
+		    // error: function(result) {
+		    //   alert('error');
+		    //   }
+	    });
+	});
+		
+	
+	
 
 	
-		
-		// $.ajax({
-		// 	type: "GET",
-		// 	url: "data",
-		// 	dataType: "json",
-		// 	success: function(data) {
-		// 		// console.log(data)
-		// 		var chart = c3.generate({
-		// 			bindto: '#chart',
-		// 			data: {
-		// 				columns: [
-		// 					data['BTC'],
-		// 				]
-		// 			}
-		// 		});
-		// 	}
-		// });
+})
+
+
 	
 	// function getChartLTC() {
 		

@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 import json
 from django.views.generic import View
-from datetime import date
+from datetime import date, datetime
 import time
 import pandas as pd
 pd.core.common.is_list_like = pd.api.types.is_list_like
@@ -18,21 +18,35 @@ from cryptoclient.wrapper_gdax import GDAXApi
 from cryptoclient.wrapper_coinigy import CoinigyAPI
 from cryptoclient.wrapper_binance import BinanceAPI
 from cryptoclient.wrapper_binance2 import Binance2Auth
-from cryptoclient.models import UserAddresses, UserCredentials
+from cryptoclient.models import UserAddresses, UserCredentials, UserBinanceOrders, UserGdaxOrders
+from cryptoclient.credentials import get_current_user
+# from cryptoclient.tasks import save_address
 
-from cryptoclient.form import WalletCreationForm, LimitOrderForm, CryptoToCryptoForm, WalletSendMoneyForm, BetweenGDAXAndCBForm, ChartForm, SwapCryptoSendMoneyForm, DeleteOrderForm, SubmitKeysForm
+from cryptoclient.form import WalletCreationForm, LimitOrderForm, CryptoToCryptoForm, WalletSendMoneyForm, BetweenGDAXAndCBForm, ChartForm, SwapCryptoSendMoneyForm, DeleteOrderForm, SubmitKeysForm, MarketOrderForm
 
 # Create your views here.
 
 class OptionListView(View):
 	
 	def get(self, request):
+		get_current_user(request.user.id)
+		print('line33')
+
 		GDAX = GDAXApi()
 		bitcoin_data, ethereum_data = GDAX.market_data()
+		
+		print('over here')
+		BTC_data = GDAX.get_24_hour_data('BTC-USD')
+		ETH_data = GDAX.get_24_hour_data('ETH-USD')
+		print('line 39')
+
+		print(BTC_data)
 
 		context = {
 			'bitcoin_data':bitcoin_data,
-			'ethereum_data':ethereum_data
+			'ethereum_data':ethereum_data,
+			'BTC_daily':BTC_data,
+			'ETH_daily':ETH_data
 		}
 		return render(request, 'cryptoclient/option.html', context)
 
@@ -41,7 +55,8 @@ class SubmitKeyView(View):
 	form_class = SubmitKeysForm
 
 	def get(self, request):
-
+		print(request.user, type(request.user))
+		get_current_user(request.user.id)
 		form = self.form_class()
 
 
@@ -54,7 +69,11 @@ class SubmitKeyView(View):
 		return render(request, 'cryptoclient/submit-keys.html', context)
 
 	def post(self, request):
+		# now = datetime.datetime.now()
+		# now_plus_2_years = now + datetime.timedelta(weeks = 100)
 
+		# new_years_2019 = datetime.datetime(2019, 1, 1)
+		get_current_user(request.user.id)
 		print("this is before the request")
 
 		user = User.objects.get(id=request.user.id)
@@ -72,7 +91,7 @@ class SubmitKeyView(View):
 		# print("right before form")
 		
 
-		
+		print('right before form')
 		if form.is_valid():
 
 			cb_api_key = request.POST['cb_api_key']
@@ -99,8 +118,9 @@ class SubmitKeyView(View):
 			user_cred.user = user
 			user_cred.save()
 			print("WEWEWEWEWEWEWE")
+			# save_address(request.user.id)
 
-			return redirect('cryptoclient:options-list')
+			return redirect('cryptoclient:submit-key')
 		
 		else:
 			
@@ -116,6 +136,8 @@ class SubmitKeyView(View):
 class WalletListView(View):
 
 	def get(self, request):
+		get_current_user(request.user.id)
+		# save_address(request.user.id)
 
 		auth = Wallet()
 
@@ -138,6 +160,7 @@ class WalletCreateView(View):
 
 
 	def get(self, request):
+		get_current_user(request.user.id)
 		walletcreationform = self.form_class()
 		context = {
 			"form": walletcreationform
@@ -146,6 +169,7 @@ class WalletCreateView(View):
 		return render(request, self.template_name, context)
 
 	def post(self, request):
+		get_current_user(request.user.id)
 		walletcreationform = self.form_class(request.POST)
 		
 		if walletcreationform.is_valid():
@@ -163,6 +187,7 @@ class WalletAddressView(View):
 	template_name = 'cryptoclient/wallet-addresses.html'
 
 	def get(self, request):
+		get_current_user(request.user.id)
 		auth = Wallet()
 
 		
@@ -191,6 +216,7 @@ class WalletTransactionView(View):
 	form_class = WalletSendMoneyForm
 
 	def get(self, request):
+		get_current_user(request.user.id)
 		transaction_form = self.form_class()
 
 		
@@ -201,6 +227,7 @@ class WalletTransactionView(View):
 		return render(request, self.template_name, context)
 
 	def post(self, request):
+		get_current_user(request.user.id)
 		auth = Wallet()
 		gdax = GDAXApi()
 		
@@ -246,6 +273,7 @@ class WalletCoinbaseGDAXTransferView(View):
 	form_class = BetweenGDAXAndCBForm
 
 	def get(self, request):
+		get_current_user(request.user.id)
 		GDAX = GDAXApi()
 		# accounts = GDAX.get_accounts()
 		# print(accounts)
@@ -264,7 +292,7 @@ class WalletCoinbaseGDAXTransferView(View):
 
 	def post(self, request):
 
-
+		get_current_user(request.user.id)
 		auth = Wallet()
 
 		accounts = auth.get_accounts()
@@ -333,6 +361,7 @@ class BuySellView(View):
 	form_class = LimitOrderForm
 
 	def get(self, request):
+		get_current_user(request.user.id)
 		purchaseorderform = self.form_class()
 		GDAX = GDAXApi()
 
@@ -366,14 +395,17 @@ class BuySellView(View):
 
 
 	def post(self, request):
+		get_current_user(request.user.id)
 		purchaseorderform = self.form_class(request.POST)
 
 		GDAX = GDAXApi()
 		test = type(request.POST['order_type'])
-		print(test)
+		# print(test)
 		another_str = int(request.POST['order_type'])
-		print(another_str)
-		print(request.POST)
+		# print(another_str)
+		# print(request.POST)
+
+		obj = User.objects.get(pk=request.user.id)
 
 		if request.POST['order_type'] == "1":
 			order_type = 'market'
@@ -396,23 +428,49 @@ class BuySellView(View):
 
 		price = request.POST['price']
 		amount = request.POST['amount']
-		print(order_type, order_side, crypto_pair, price, amount, "POST")
+		# print(order_type, order_side, crypto_pair, price, amount, "POST")
 
-		print(order_type,"type", order_side,"buyorsell")
-
+		# print(order_type,"type", order_side,"buyorsell")
+		gdax_orders = UserBinanceOrders()
 
 
 		if purchaseorderform.is_valid():
 			
 			if order_type == "limit":
 				order = GDAX.create_limit_order(order_side, price, crypto_pair, amount, order_type)
+				
+				gdax_orders.crypto_pair = crypto_pair
+				gdax_orders.order_type = order_type
+				gdax_orders.buy_or_sell = order_side
+				gdax_orders.price = float(order)
+				gdax_orders.amount = float(amount)
+				gdax_orders.exchange = "GDAX"
+				gdax_orders.user = obj
+				gdax_orders.save()
 				print(order, "limit")
 
 			elif order_type == "market":
-				order = GDAX.create_market_order(order_side, price, crypto_pair, amount, order_type)
-				print(order, "market")
+		
+				# print(order_side, order_type, crypto_pair, amount, order1, price)
+				# print(type(order_side), type(order_type), type(crypto_pair), type(amount), type(order1), type(price))
 
-			return redirect('cryptoclient:options-list')
+				order1 = GDAX.create_market_order(order_side, order_type, crypto_pair, amount)
+
+				# print(order_side, order_type, crypto_pair, amount, order1, price)
+				# print(type(order_side), type(order_type), type(crypto_pair), type(amount), type(order1), type(price))
+				
+
+				gdax_orders.crypto_pair = crypto_pair
+				gdax_orders.order_type = order_type
+				gdax_orders.buy_or_sell = order_side
+				gdax_orders.price = float(order1)
+				gdax_orders.amount = float(amount)
+				gdax_orders.exchange = "GDAX"
+				gdax_orders.user = obj
+				gdax_orders.save()
+				# print(order, "market")
+
+			return redirect('cryptoclient:buy-sell')
 
 		else:
 			print('form is broken')
@@ -421,7 +479,8 @@ class BuySellView(View):
 class BuySellDataView(View):
 
 	def get(self, request):
-
+		print("just got into the data")
+		get_current_user(request.user.id)
 		GDAX = GDAXApi()
 
 
@@ -463,11 +522,58 @@ class BuySellDataView(View):
 		print(crypto_json, "wow")
 		return JsonResponse(crypto_json)
 
+class BuySellLTCDataView(View):
+
+	def get(self, request):
+		print("just got into the data")
+		get_current_user(request.user.id)
+		GDAX = GDAXApi()
+
+
+		start = date(2017, 12, 4).isoformat()
+		end = date(2018, 7, 3).isoformat()
+		# print(start, end)
+		# style.use('ggplot')
+		granularity = '86400'
+		LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
+		# ETH_candle_data = GDAX.get_candle_data(start, end, granularity, 'ETH-USD')
+		# LTC_candle_data = GDAX.get_candle_data(start, end, granularity, 'LTC-USD')
+		# print(ETH_candle_data)
+		# print(BTC_candle_data)
+		LTC_close_data = GDAX.get_close_data(LTC_candle_data)
+		# ETH_close_data = GDAX.get_close_data(ETH_candle_data)
+		# LTC_close_data = GDAX.get_close_data(LTC_candle_data)
+		# print(LTC_candle_data)
+
+		# ltc_json = GDAX.to_json(LTC_close_data)
+		# print(ETH_close_data)
+
+		# GDAX.to_csv(BTC_close_data, 'BTC-USD')
+		# GDAX.to_csv(ETH_close_data, 'ETH-USD')
+		# GDAX.to_csv(LTC_close_data, 'LTC-USD')
+
+		# url(r'^crypto/buy-sell/data$', views.BuySellDataView.as_view(), name="buy-sell-data"),
+		# print(ltc_json)
+		crypto_json = {}
+		LTC_close_data.insert(0, 'LTC')
+		# ETH_close_data.insert(0, 'ETH')
+		# LTC_close_data.insert(0, 'LTC')
+		# print(LTC_close_data)
+		# crypto_json['LTC'] = LTC_close_data
+		crypto_json['LTC'] = LTC_close_data
+		# crypto_json['ETH'] = ETH_close_data
+
+		
+		# print(ltc_json)
+		print(crypto_json, "wow")
+		return JsonResponse(crypto_json)
+
 class BuySellOrderView(View):
 
 	form_class = DeleteOrderForm
 
 	def get(self,request):
+		get_current_user(request.user.id)
 		GDAX = GDAXApi()
 
 		form = self.form_class()
@@ -482,6 +588,8 @@ class BuySellOrderView(View):
 		# 	stop = 'entry'
 		# order = GDAX.create_order()
 
+		print(all_open_orders)
+
 		context = {
 			'form':form,
 			'open_orders':all_open_orders
@@ -490,6 +598,7 @@ class BuySellOrderView(View):
 		return render(request, 'cryptoclient/buy-sell-order.html', context)
 
 	def post(self, request):
+		get_current_user(request.user.id)
 		form = self.form_class(request.POST)
 
 		if form.is_valid():
@@ -508,6 +617,7 @@ class BuySellOrderView(View):
 class BuySellAccountsView(View):
 
 	def get(self,request):
+		get_current_user(request.user.id)
 		GDAX = GDAXApi()
 
 		
@@ -553,18 +663,54 @@ class ProfileView(View):
 
 		# list_of_all_ids = [litecoin_id, bitcoin_id, bitcoin_cash_id, ethereum_id, usd_id]
 		# list_of_all_binance_pairs = ['BCC/BTC', 'BTC/USDT', 'BCC/USDT', ]
+		get_current_user(request.user.id)
 
-		list_of_all_pastbuysell_transactions = []
-		auth = Wallet()
+		obj = User.objects.get(pk=request.user.id)
 
-		binance = BinanceAPI()
-		binance_data = binance.get_past_trades()
-		ticker_data = binance.ticker()
-		print(ticker_data, "thisthisthisthis")
-		ticker_list = []
+		# all_gdax_orders = UserGdaxOrders.objects.all()
+		all_binance_orders = UserBinanceOrders.objects.all()
+		# print(all_binance_orders)
 
-		for ticker in ticker_data:
-			ticker_list.append(ticker['symbol'])
+		# current_user_gdax_orders = all_gdax_orders.filter(user=obj)
+		current_user_binance_orders = all_binance_orders.filter(user=obj)
+
+		print(current_user_binance_orders)
+
+		
+
+
+
+
+
+
+
+
+
+
+
+		# list_of_all_pastbuysell_transactions = []
+		# auth = Wallet()
+		# gdax = GDAXApi()
+		# list_of_all_GDAX_pairs = ["BTC-USD", "ETH-USD", "LTC-USD"]
+		
+		# for item in list_of_all_GDAX_pairs:
+
+		# 	fills = gdax.list_fills(item)
+		# 	print(fills)
+
+		# binance = BinanceAPI()
+		# coinigy = CoinigyAPI()
+		# balances = coinigy.list_balances()
+		# balances = balances['data']
+
+		# # binance_data = binance.get_past_trades()
+		# # print(binance_data)
+		# ticker_data = binance.ticker()
+		# # print(ticker_data, "thisthisthisthis")
+		# ticker_list = []
+
+		# for ticker in ticker_data:
+		# 	ticker_list.append(ticker['symbol'])
 		# print(ticker_list)
 
 		# for ticker in ticker_list:
@@ -579,41 +725,41 @@ class ProfileView(View):
 
 		
 
-		all_accounts = auth.get_accounts()
-		# print(all_accounts, "all accounts")
-		litecoin_id = all_accounts['data'][2]['id']
-		bitcoin_id = all_accounts['data'][4]['id']
-		bitcoin_cash_id = all_accounts['data'][0]['id']
-		ethereum_id = all_accounts['data'][3]['id']
-		usd_id = all_accounts['data'][1]['id']
+		# all_accounts = auth.get_accounts()
+		# # print(all_accounts, "all accounts")
+		# litecoin_id = all_accounts['data'][2]['id']
+		# bitcoin_id = all_accounts['data'][4]['id']
+		# bitcoin_cash_id = all_accounts['data'][0]['id']
+		# ethereum_id = all_accounts['data'][3]['id']
+		# usd_id = all_accounts['data'][1]['id']
 
-		list_of_all_ids = [litecoin_id, bitcoin_id, bitcoin_cash_id, ethereum_id, usd_id]
+		# list_of_all_ids = [litecoin_id, bitcoin_id, bitcoin_cash_id, ethereum_id]
 
-		for crypto_id in list_of_all_ids:
-			transactions = auth.get_all_transactions(crypto_id)
+		# for crypto_id in list_of_all_ids:
+		# 	transactions = auth.get_all_transactions(crypto_id)
 
-			number_of_transaction = len(transactions['data'])
+		# 	number_of_transaction = len(transactions['data'])
 
-			for transaction in range(0, number_of_transaction-1):
-				# print(transactions['data'], "RIGHT HERE")
-				list_of_all_pastbuysell_transactions.append(transactions['data'][transaction])
+		# 	for transaction in range(0, number_of_transaction-1):
+		# 		# print(transactions['data'], "RIGHT HERE")
+		# 		list_of_all_pastbuysell_transactions.append(transactions['data'][transaction])
 
 
 
 		# print(list_of_all_pastbuysell_transactions, "alltransaction")
 
-		newlist = sorted(list_of_all_pastbuysell_transactions, key=lambda k: k['created_at'], reverse=True) 
+		# newlist = sorted(list_of_all_pastbuysell_transactions, key=lambda k: k['created_at'], reverse=True) 
 
-		# print(newlist, "right here")
+		# # print(newlist, "right here")
 
 
-		litecoin_transactions = auth.get_all_transactions(litecoin_id)
-		bitcoin_transactions = auth.get_all_transactions(bitcoin_id)
-		bitcoin_cash_transactions = auth.get_all_transactions(bitcoin_cash_id)
-		ethereum_transactions = auth.get_all_transactions(ethereum_id)
-		usd_transactions = auth.get_all_transactions(usd_id)
-		# print(litecoin_transactions['data'], "litecoin transasction")
-		total_account_value = auth.get_total_account_value()
+		# litecoin_transactions = auth.get_all_transactions(litecoin_id)
+		# bitcoin_transactions = auth.get_all_transactions(bitcoin_id)
+		# bitcoin_cash_transactions = auth.get_all_transactions(bitcoin_cash_id)
+		# ethereum_transactions = auth.get_all_transactions(ethereum_id)
+		# usd_transactions = auth.get_all_transactions(usd_id)
+		# # print(litecoin_transactions['data'], "litecoin transasction")
+		# total_account_value = auth.get_total_account_value()
 
 
 
@@ -626,7 +772,26 @@ class ProfileView(View):
 
 		# balance = primary_account.balance
 		# context = {'primary_account':primary_account, 'all_transactions':all_transactions, 'primary_transactions':primary_transactions}
-		context = {'past_buysell_transactions':newlist, 'account_value':total_account_value}
+
+		print(current_user_binance_orders)
+		# current_user_binance_orders = current_user_binance_orders.reverse()
+		# final_list = []
+
+		# for item in current_user_binance_orders:
+		# 	final_list.append(item)
+
+		# print(final_list)
+
+		# final_list = final_list.reverse()
+
+		# print(final_list)
+
+		current_user_binance_orders = current_user_binance_orders.reverse()[:5]
+
+
+		context = {
+			'past_orders':current_user_binance_orders
+		}
 		return render(request, 'cryptoclient/profile.html', context)
 
 class WalletSendMoneyView(View):
@@ -637,15 +802,17 @@ class WalletSendMoneyView(View):
 class SwapCryptoWalletView(View):
 	
 	def get(self, request):
+		get_current_user(request.user.id)
 		coinigy = CoinigyAPI()
 		binance2 = Binance2Auth()
 		gdax = GDAXApi()
 
-		tickers = binance2.get_all_tickers()
-		for item in tickers:
-			# print(item)
-			symbol = item['symbol']
-			# print(symbol)
+		# tickers = binance2.get_all_tickers()
+		list_of_main_cryptos = ['BTC', 'ETH', 'LTC', 'ETC']
+		# for item in tickers:
+		# 	# print(item)
+		# 	symbol = item['symbol']
+		# 	# print(symbol)
 			
 
 		balances = coinigy.list_balances()
@@ -655,10 +822,19 @@ class SwapCryptoWalletView(View):
 		# print(balances)
 
 		crypto_list = binance2.every_crypto_binance()
+		list_of_final_balances = []
 
-		# for item in crypto_list:
+		for item in list_of_main_cryptos:
+			address = binance2.get_deposit_address(item)
+			cryptoaddress = {
+				'crypto':item,
+				'address':address
+			}
+			list_of_final_balances.append(cryptoaddress)
+
+			time.sleep(1)
 		# 	address = binance2.get_deposit_address(item)
-		# 	print(item, type(address), address)
+		# 	print(item, type(address), address, "hererereerer")
 		# 	user_address = UserAddresses()
 		# 	if address['success'] == False:
 		# 		continue
@@ -676,33 +852,176 @@ class SwapCryptoWalletView(View):
 
 
 		# 	time.sleep(3)
+		# print(balances,"right here")
+		# list_of_balances = balances['data']
+		# print(list_of_balances, 'list_of_balances')
+		# list_of_crypto_balance_symbol = []
 
-		user_addresses = UserAddresses.objects.all()
-		print(user_addresses)
-		# for item in user_addresses:
-		# 	print(item.address, item.crypto)
+		# for balance in list_of_balances:
+		# 	list_of_crypto_balance_symbol.append(balance['balance_curr_code'])
+
+		# # print(list_of_balances)
+		# user_addresses = UserAddresses.objects.filter(address__lte=20)
+		
+
+		# list_of_crypto_addresses = []
+		# list_of_no_addresses = []
+		# # print(list_of_crypto_balances)
+		# for item in list_of_crypto_balance_symbol:
+			
+			
+		# 	cryptoaddress = user_addresses.filter(crypto=item)
+		# 	print(cryptoaddress)
+		# 	# print(cryptoaddress)
+		# 	if cryptoaddress.exists():
+		# 		cryptoaddress = cryptoaddress[0]
+		# 		list_of_crypto_addresses.append(cryptoaddress)
+
+		# 	else:
+		# 		list_of_no_addresses.append(item)
+				
+
+			
+				
+		# print(list_of_no_addresses)
+		# list_of_final = []
+
+		# for item in list_of_balances:
+		# 	if item in list_of_no_addresses:
+		# 		returnvalue = list_of_balances.pop()
+
+		# # print(list_of_balances)
+		# print(list_of_crypto_addresses, 'crypto_addresses')
+
+		# for item in range(0, len(list_of_balances)-1):
+			
+		# 	current_crypto = list_of_balances[item]
+		# 	print(current_crypto, "sdssds")
+		# 	print(list_of_balances[item]['balance_amount_avail'])
+		# 	available = list_of_balances[item]['balance_amount_avail']
+		# 	total = list_of_balances[item]['balance_amount_total']
 
 
-		print(balances,"right here")
+
+		# 	final_list = {
+
+		# 		'crypto': list_of_crypto_balances[item],
+		# 		'address': list_of_crypto_addresses[item].address,
+		# 		'current_holding': available,
+		# 		'total_holding': total
+		# 	}
+
+		# 	list_of_final.append(final_list)
+
+		# # list_of_excluded = UserAddresses.
+		# final_list_excluded = ""
+
+		# # for item in list_of_final:
+		# # 	addresses = UserAddresses.objects.exclude(crypto=item)
+		# # 	final_list_excluded = ad
+
+		# for item in range(0,len(list_of_final)-1):
+		# 	if len(final_list_excluded) == 0:
+		# 		addresses = UserAddresses.objects.exclude(crypto=list_of_final[item])
+		# 		final_list_excluded = addresses
+
+		# 	final_list_excluded = final_list_excluded.exclude(crypto=list_of_final[item])
+
+		
+		# print(final_list_excluded) 
+		# list_of_excluded = []
+
+
+		# for item in range(0, len(final_list_excluded)-1):
+			
+		# 	user_address = final_list_excluded[item]
+			
+
+		# 	list_of_excluded.append(user_address)
+
+
+		
+
+		# zero = '0.0000'
+		
 
 		context = {
 			'balances': balances,
-			'user_addresses': user_addresses
+			'user_addresses': list_of_final_balances,
+			# 'list_of_excluded': list_of_excluded,
+			# 'zero': zero
 		}
 
 		return render(request, 'cryptoclient/swap-crypto-wallet.html', context)
+
+class SwapCryptoAddressView(View):
+
+	# Need to get all the tickers for 
+
+	def get(self, request):
+		get_current_user(request.user.id)
+		coinigy = CoinigyAPI()
+		binance2 = Binance2Auth()
+
+		crypto_list = binance2.every_crypto_binance()
+
+		balances = coinigy.list_balances()
+		# print(balances)
+		balances = balances['data']
+		print(balances)
+		list_of_only_holding_symbol = []
+		for item in balances:
+			list_of_only_holding_symbol.append(item['balance_curr_code'])
+
+		final_list = []
+
+		for crypto in crypto_list:
+			if crypto in list_of_only_holding_symbol:
+				for item in balances:
+					if item['balance_curr_code'] == crypto:
+						balance_current = item['balance_amount_avail']
+						balance_total = item['balance_amount_total']
+
+						temporary_dict = {
+							'crypto':crypto,
+							'balance_current':balance_current,
+							'balance_total' : balance_total
+						}
+						final_list.append(temporary_dict)
+
+			else:
+
+				temporary_dict = {
+							'crypto':crypto,
+							'balance_current':"0.00000",
+							'balance_total': "0.00000"
+						}
+
+				final_list.append(temporary_dict)
+
+		context = {
+			'final_list':balances
+		}
+
+			
+		return render(request, 'cryptoclient/swap-crypto-address.html', context)
+
+
 
 
 
 class SwapCryptoView(View):
 
 	form_class = CryptoToCryptoForm
-	form_class2 = ChartForm
+	form_class2 = MarketOrderForm
 
 	def get(self, request):
-
+		get_current_user(request.user.id)
 		cryptotocryptoform = self.form_class()
-		chart_form = self.form_class2()
+		market_order_form = self.form_class2()
+		binance = Binance2Auth()
+		tickers = binance.get_all_tickers()
+		print(tickers)
 
 
 
@@ -756,14 +1075,14 @@ class SwapCryptoView(View):
 			# 'auth':auth['data'][0],
 			# 'balances':balances['data'],
 			'form':cryptotocryptoform,
-			'chart_form': chart_form,
+			'market_form': market_order_form,
 			# 'orders':orders['data']
 		}
 
 		return render(request, 'cryptoclient/swap-crypto.html', context)
 
 	def post(self, request):
-
+		get_current_user(request.user.id)
 		print(request.body, "here")
 		parsed_body = request.body.decode('ascii')
 		print(parsed_body)
@@ -777,6 +1096,8 @@ class SwapCryptoView(View):
 
 		coinigy = CoinigyAPI()
 		binance = Binance2Auth()
+
+		binance_orders = UserBinanceOrders()
 
 		# auth_id, exch_id, = coinigy.get_auth_and_exch_id()
 		order_types = coinigy.get_ordertype_pricetype_id()
@@ -804,6 +1125,8 @@ class SwapCryptoView(View):
 		# print(pairs)
 
 		cryptotocryptoform = self.form_class(request.POST)
+
+		obj = User.objects.get(pk=request.user.id)
 		# print(request.POST, 'post req')
 
 
@@ -848,16 +1171,64 @@ class SwapCryptoView(View):
 			if order_type_id1 == 'Buy' and price_type_id == 'Limit':
 
 				binance.create_buylimit_order(user_pair_data, order_quantity, limit_price)
+				binance_orders.crypto_pair = user_pair_data
+				binance_orders.order_type = price_type_id
+				binance_orders.buyorsell = order_type_id1
+				binance_orders.price = limit_price
+				binance_orders.amount = order_quantity
+				binance_orders.user = obj
+				binance_orders.exchange = "Binance"
+				binance_orders.save()
+				
 				print('executed')
+
+
+
 			elif order_type_id1 == 'Sell' and price_type_id == 'Limit':
 				binance.create_selllimit_order(user_pair_data, order_quantity, limit_price)
+				binance_orders.crypto_pair = user_pair_data
+				binance_orders.order_type = price_type_id
+				binance_orders.buyorsell = order_type_id1
+				binance_orders.price = limit_price
+				binance_orders.amount = order_quantity
+				binance_orders.exchange = "Binance"
+				binance_orders.user = obj
+				binance_orders.save()
+
 				print('executed')
+
+
+
 			elif order_type_id1 == 'Buy' and price_type_id == 'Market':
-				binance.create_buymarket_order(user_pair_data, order_quantity, limit_price)
+				price = binance.create_buymarket_order(user_pair_data, order_quantity)
+				binance_orders.crypto_pair = user_pair_data
+				binance_orders.order_type = price_type_id
+				binance_orders.buyorsell = order_type_id1
+				binance_orders.price = price
+				binance_orders.amount = order_quantity
+				binance_orders.exchange = "Binance"
+				binance_orders.user = obj
+				binance_orders.save()
+
 				print('executed')
+
+
+
 			elif order_type_id1 == 'Sell' and price_type_id == 'Market':
-				binance.create_sellmarket_order(user_pair_data, order_quantity, limit_price)
+				price = binance.create_sellmarket_order(user_pair_data, order_quantity)
+				binance_orders.crypto_pair = user_pair_data
+				binance_orders.order_type = price_type_id
+				binance_orders.buyorsell = order_type_id1
+				binance_orders.exchange = "Binance"
+				binance_orders.price = price
+				binance_orders.amount = order_quantity
+				binance_orders.user = obj
+				binance_orders.save()
+
 				print('executed')
+
+
+
 			# print(auth_id, exch_id, mkt_id, order_type_id, price_type_id, limit_price, order_quantity, "right before order creation")
 			# order = coinigy.create_order(int(auth_id), int(exch_id), int(mkt_id), int(order_type_id), price_type_id, float(limit_price), float(order_quantity))
 			# print(order)
@@ -876,7 +1247,7 @@ class SwapCryptoSendMoneyView(View):
 	form_class = SwapCryptoSendMoneyForm
 
 	def get(self, request):
-
+		get_current_user(request.user.id)
 		send_form = self.form_class()
 
 		context = {
@@ -886,7 +1257,7 @@ class SwapCryptoSendMoneyView(View):
 		return render(request, 'cryptoclient/swap-crypto-send-money.html', context)
 
 	def post(self,request):
-
+		get_current_user(request.user.id)
 		swapcryptoform = self.form_class(request.POST)
 
 		if swapcryptoform.is_valid():
@@ -911,7 +1282,7 @@ class SwapCryptoOrderView(View):
 	form_class = DeleteOrderForm
 
 	def get(self, request):
-
+		get_current_user(request.user.id)
 		binance = BinanceAPI()
 		binance2 = Binance2Auth()
 
@@ -935,7 +1306,7 @@ class SwapCryptoOrderView(View):
 		return render(request, 'cryptoclient/swap-crypto-orders.html', context)
 
 	def post(self, request):
-
+		get_current_user(request.user.id)
 		deleteform = self.form_class(request.POST)
 		print(request.POST)
 
@@ -961,6 +1332,20 @@ class SwapCryptoOrderView(View):
 
 		else:
 			return HttpResponse('Didnt Work')
+
+class SwapCryptoPricesView(View):
+
+	def get(self, request):
+
+		binance = Binance2Auth()
+		tickers = binance.get_all_tickers()
+		print(tickers)
+
+		context = {
+			'tickers':tickers
+		}
+
+		return render(request, 'cryptoclient/swap-crypto-prices.html', context)
 
 
 
