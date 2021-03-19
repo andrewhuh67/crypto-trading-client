@@ -18,7 +18,7 @@ django-bootstrap3==10.0.1
 django-compat==1.0.15
 django-crispy-forms==1.7.2
 django-toolbelt==0.0.1
-djangorestframework==3.8.1
+djangorestframework==3.11.2
 gunicorn==19.7.1
 hyperlink==18.0.0
 idna==2.6
